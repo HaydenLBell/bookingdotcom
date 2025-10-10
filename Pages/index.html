@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bookingdotcom | Home</title>
+    <link rel="stylesheet" href="/CSS/styles.css">
+    <link rel="icon" type="image/x-icon" href="/Resources/images/press.ico">
+    <script src="/JS/app.js" defer></script>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <h1><a href="index.html">booking</a>dotcom</h1>
+
+        <div class="airbnb-search">
+            <div class="search-section">
+                <label for="where">Where</label>
+                <input type="text" id="where" placeholder="Search destinations">
+            </div>
+
+            <div class="search-section">
+                <label for="checkin">Check in</label>
+                <input type="date" id="checkin">
+            </div>
+
+            <div class="search-section">
+                <label for="checkout">Check out</label>
+                <input type="date" id="checkout">
+            </div>
+
+            <div class="search-section" id="guestsSection">
+                <label for="guests">Who</label>
+                <input type="text" id="guests" placeholder="Add guests" readonly>
+                <div class="guests-dropdown" id="guestsDropdown">
+                    <div class="guest-row">
+                        <span>Adults</span>
+                        <div class="guest-controls">
+                            <button class="decrease">-</button>
+                            <span class="count" data-type="adults">0</span>
+                            <button class="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="guest-row">
+                        <span>Children</span>
+                        <div class="guest-controls">
+                            <button class="decrease">-</button>
+                            <span class="count" data-type="children">0</span>
+                            <button class="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="guest-row">
+                        <span>Infants</span>
+                        <div class="guest-controls">
+                            <button class="decrease">-</button>
+                            <span class="count" data-type="infants">0</span>
+                            <button class="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="guest-row">
+                        <span>Pets</span>
+                        <div class="guest-controls">
+                            <button class="decrease">-</button>
+                            <span class="count" data-type="pets">0</span>
+                            <button class="increase">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="search-btn">🔍</button>
+        </div>
+
+        <button id="menu-toggle">☰</button>
+        <ul id="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="destinations.html">All Destinations</a></li>
+            <li><a href="listings.html">New Listings</a></li>
+            <li><a href="profile.html">Log In</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+        </ul>
+    </nav>
+
+    <!-- Recent Searches -->
+    <section id="recent-searches">
+        <h2>Recent Searches</h2>
+        <div class="recent-grid">
+            <div class="recent-card">Edinburgh</div>
+            <div class="recent-card">London</div>
+            <div class="recent-card">Paris</div>
+            <div class="recent-card">Barcelona</div>
+            <div class="recent-card">New York</div>
+        </div>
+    </section>
+
+    <!-- Trending Destinations -->
+    <section id="trending">
+        <h2>Trending Destinations</h2>
+        <div class="trending-grid">
+            <div class="trend-card">
+                <img src="/Resources/images/london.jpg" alt="IMAGE">
+                <h3>London</h3>
+            </div>
+            <div class="trend-card">
+                <img src="/Resources/images/edinburgh.jpg" alt="IMAGE">
+                <h3>Edinburgh</h3>
+            </div>
+            <div class="trend-card">
+                <img src="/Resources/images/paris.jpg" alt="IMAGE">
+                <h3>Paris</h3>
+            </div>
+            <div class="trend-card">
+                <img src="/Resources/images/barcelona.jpg" alt="IMAGE">
+                <h3>Barcelona</h3>
+            </div>
+            <div class="trend-card">
+                <img src="/Resources/images/rome.jpg" alt="IMAGE">
+                <h3>Rome</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Listings -->
+    <section id="featured-listings">
+        <h2>Featured Listings</h2>
+        <div class="featured-grid">
+            <div class="listing-card">
+                <img src="/Resources/images/jorjor.jpg" alt="Seaside Hotel">
+                <h3>Seaside Hotel</h3>
+                <p>Beautiful views by the coast.</p>
+                <div class="rating">★★★★★</div>
+            </div>
+            <div class="listing-card">
+                <img src="/Resources/images/pp.jpg" alt="City Center Apartment">
+                <h3>City Center Apartment</h3>
+                <p>Stay close to everything downtown.</p>
+                <div class="rating">★★★★★</div>
+            </div>
+            <div class="listing-card">
+                <img src="/Resources/images/hp.jpg" alt="Mountain Lodge">
+                <h3>Mountain Lodge</h3>
+                <p>Cozy cabins surrounded by nature.</p>
+                <div class="rating">★★★★★</div>
+            </div>
+            <div class="listing-card">
+                <img src="/Resources/images/one.jpg" alt="Luxury Villa">
+                <h3>Luxury Villa</h3>
+                <p>Private pool and premium amenities.</p>
+                <div class="rating">★★★★★</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-section">
+            <h3>COMPANY</h3>
+            <ul>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Careers</a></li>
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Privacy</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>WORK WITH US</h3>
+            <ul>
+                <li><a href="#">Partners</a></li>
+                <li><a href="#">Advertise</a></li>
+                <li><a href="#">API</a></li>
+            </ul>
+        </div>
+        <div class="footer-section social-icons">
+            <h3>CONNECT</h3>
+            <a href="#">🔵</a>
+            <a href="#">🐦</a>
+            <a href="#">📷</a>
+            <a href="#">🔗</a>
+        </div>
+        <div class="footer-section app-links">
+            <img src="/Resources/images/appleandgoogleplay.png" alt="App Download Links">
+            <p>&copy; 2025 bookingdotcom, Inc.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
