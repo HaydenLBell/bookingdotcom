@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account | notbookingdotcom</title>
+<link rel="stylesheet" href="/CSS/styles.css">
+<style>
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    background-color: #5C556E;
+    color: #F0EEED;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+nav {
+    width: 100%;
+    background-color: #383540;
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav h1 a {
+    color: #BCB77B;
+    text-decoration: none;
+    font-size: 1.8rem;
+}
+
+.account-container {
+    background-color: #383540;
+    border-radius: 15px;
+    padding: 40px;
+    margin-top: 100px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+}
+
+.account-container h2 {
+    color: #BCB77B;
+    margin-bottom: 15px;
+}
+
+.account-container p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+#logoutBtn {
+    background-color: #BCB77B;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+#logoutBtn:hover {
+    background-color: #e03150;
+}
+</style>
+</head>
+<body>
+    <nav>
+        <h1><a href="/Pages/index.html">booking</a>dotcom</h1>
+    </nav>
+
+    <div class="account-container">
+        <h2>Your Account</h2>
+        <p id="userInfo"></p>
+        <button id="logoutBtn">Logout</button>
+    </div>
+
+    <script>
+    // Get user data from localStorage
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userInfo = document.getElementById('userInfo');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    if (!user) {
+        // If not logged in, redirect to login page
+        window.location.href = '/Pages/login.html';
+    } else {
+        // Show user info
+        userInfo.innerHTML = `
+            <strong>Name:</strong> ${user.fname} ${user.lname}<br>
+            <strong>Email:</strong> ${user.email}<br>
+            <strong>Admin:</strong> ${user.isAdmin ? 'Yes' : 'No'}
+        `;
+    }
+
+    // Logout button clears localStorage and redirects
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('user');
+        window.location.href = '/Pages/login.html';
+    });
+    </script>
+</body>
+</html>

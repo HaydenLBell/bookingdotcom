@@ -3,11 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>notbookingdotcom | Sign Up</title>
+<title>notbookingdotcom | Login</title>
 <link rel="icon" type="image/x-icon" href="/Resources/images/press.ico">
 <style>
-/* Reuse your login CSS */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ===========================
+   GLOBAL STYLES
+=========================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 body {
     font-family: 'Inter', Arial, sans-serif;
@@ -19,6 +25,9 @@ body {
     height: 100vh;
 }
 
+/* ===========================
+   LOGIN CONTAINER
+=========================== */
 .login-container {
     background-color: #383540;
     padding: 40px 30px;
@@ -39,6 +48,14 @@ body {
     margin-bottom: 20px;
 }
 
+.login-container p {
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+/* ===========================
+   FORM STYLING
+=========================== */
 .login-container label {
     display: block;
     text-align: left;
@@ -75,6 +92,20 @@ body {
     background-color: #e03150;
 }
 
+.signup-link {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.signup-link a {
+    color: #BCB77B;
+    text-decoration: none;
+}
+
+.signup-link a:hover {
+    color: #e03150;
+}
+
 .error-msg {
     color: #ff4d4d;
     font-size: 14px;
@@ -85,58 +116,52 @@ body {
 <body>
 <div class="login-container">
     <h1><a href="index.html" style="color:#BCB77B;text-decoration:none;">booking</a>dotcom</h1>
-    <h2>Create Account</h2>
-
-    <form id="signupForm">
-        <label for="fname">First Name</label>
-        <input type="text" id="fname" name="fname" required>
-
-        <label for="lname">Last Name</label>
-        <input type="text" id="lname" name="lname" required>
-
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-
+    <h2>Login</h2>
+    <p>Enter your credentials to access your account</p>
+    
+    <form id="loginForm">
+        <label for="username">Email</label>
+        <input type="text" id="username" name="username" required>
+    
         <label for="password">Password</label>
         <input type="password" id="password" name="password" required>
-
-        <button type="submit">Create Account</button>
+    
+        <button type="submit">Login</button>
+        <p class="signup-link">Don't have an account? <a href="signup.html">Create one</a></p>
         <p id="errorMsg" class="error-msg"></p>
     </form>
 </div>
 
 <script>
-const form = document.getElementById('signupForm');
+const form = document.getElementById('loginForm');
 const errorMsg = document.getElementById('errorMsg');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const fname = form.fname.value;
-    const lname = form.lname.value;
-    const email = form.email.value;
+    const email = form.username.value;  // backend expects 'email'
     const password = form.password.value;
 
     try {
-        const res = await fetch('http://localhost:3000/api/signup', {
+        const res = await fetch('http://localhost:3000/api/login', {  // match route
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ fname, lname, email, password })
+            body: JSON.stringify({ email, password })
         });
 
         const data = await res.json();
 
         if (res.ok) {
-            alert('Account created successfully! Redirecting to login...');
-            window.location.href = '/Pages/login.html';
-        } else {
-            errorMsg.textContent = data.error || 'Signup failed.';
+            // Save user info locally
+            localStorage.setItem('user', JSON.stringify(data.user || { email }));
+
+            // Redirect to homepage
+            window.location.href = '/Pages/index.html';
         }
+
     } catch (err) {
-        console.error(err);
         errorMsg.textContent = 'Server error. Try again later.';
+        console.error(err);
     }
 });
 </script>
-</body>
-</html>

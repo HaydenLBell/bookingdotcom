@@ -4,10 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>notbookingdotcom | Home</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/CSS/styles.css">
     <link rel="icon" type="image/x-icon" href="/Resources/images/press.ico">
     <script src="/JS/app.js" defer></script>
 </head>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.getElementById('nav-links');
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+
+    if (storedUser) {
+        // Remove login/signup link
+        const loginItem = [...navLinks.children].find(li => li.textContent.includes('Log-in'));
+        if (loginItem) navLinks.removeChild(loginItem);
+
+        // Add account + logout
+        const accountItem = document.createElement('li');
+        accountItem.innerHTML = `<a href="/Pages/account.html">Account (${storedUser.fname || storedUser.email})</a>`;
+        navLinks.appendChild(accountItem);
+
+        const logoutItem = document.createElement('li');
+        logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
+        navLinks.appendChild(logoutItem);
+
+        // Handle logout click
+        document.getElementById('logout-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('user');
+            window.location.reload();
+        });
+    }
+});
+</script>
+
+
 <body>
 
     <!-- Navigation Bar -->
@@ -74,10 +105,10 @@
 
         <button id="menu-toggle">☰</button>
         <ul id="nav-links">
-            <li><a href="index.html">Home</a></li>
+            <li><a href="Pages/index.html">Home</a></li>
             <li><a href="destinations.html">All Destinations</a></li>
             <li><a href="listings.html">New Listings</a></li>
-            <li><a href="signup.html">Log-in / Sign-Up</a></li>
+            <li><a href="/Pages/login.html">Log-in / Sign-Up</a></li>
         </ul>
     </nav>
 
@@ -98,23 +129,23 @@
         <h2>Trending Destinations</h2>
         <div class="trending-grid">
             <div class="trend-card">
-                <img src="/Resources/images/london.jpg" alt="IMAGE">
+                <img src="/public/Resources/images/london.jpg" alt="IMAGE">
                 <h3>London</h3>
             </div>
             <div class="trend-card">
-                <img src="/Resources/images/edinburgh.jpg" alt="IMAGE">
+                <img src="/public//Resources/images/edinburgh.jpg" alt="IMAGE">
                 <h3>Edinburgh</h3>c
             </div>
             <div class="trend-card">
-                <img src="/Resources/images/paris.jpg" alt="IMAGE">
+                <img src="/public//Resources/images/paris.jpg" alt="IMAGE">
                 <h3>Paris</h3>
             </div>
             <div class="trend-card">
-                <img src="/Resources/images/barcelona.jpg" alt="IMAGE">
+                <img src="/public//Resources/images/barcelona.jpg" alt="IMAGE">
                 <h3>Barcelona</h3>
             </div>
             <div class="trend-card">
-                <img src="/Resources/images/rome.jpg" alt="IMAGE">
+                <img src="/public//Resources/images/rome.jpg" alt="IMAGE">
                 <h3>Rome</h3>
             </div>
         </div>
@@ -125,25 +156,25 @@
         <h2>Featured Listings</h2>
         <div class="featured-grid">
             <div class="listing-card">
-                <img src="/Resources/images/jorjor.jpg" alt="Seaside Hotel">
+                <img src="/public//Resources/images/jorjor.jpg" alt="Seaside Hotel">
                 <h3>Seaside Hotel</h3>
                 <p>Beautiful views by the coast.</p>
                 <div class="rating">★★★★★</div>
             </div>
             <div class="listing-card">
-                <img src="/Resources/images/pp.jpg" alt="City Center Apartment">
+                <img src="/public//Resources/images/pp.jpg" alt="City Center Apartment">
                 <h3>City Center Apartment</h3>
                 <p>Stay close to everything downtown.</p>
                 <div class="rating">★★★★★</div>
             </div>
             <div class="listing-card">
-                <img src="/Resources/images/hp.jpg" alt="Mountain Lodge">
+                <img src="/public//Resources/images/hp.jpg" alt="Mountain Lodge">
                 <h3>Mountain Lodge</h3>
                 <p>Cozy cabins surrounded by nature.</p>
                 <div class="rating">★★★★★</div>
             </div>
             <div class="listing-card">
-                <img src="/Resources/images/one.jpg" alt="Luxury Villa">
+                <img src="/public//Resources/images/one.jpg" alt="Luxury Villa">
                 <h3>Luxury Villa</h3>
                 <p>Private pool and premium amenities.</p>
                 <div class="rating">★★★★★</div>
