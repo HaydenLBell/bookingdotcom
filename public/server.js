@@ -8,10 +8,11 @@ app.use(express.json());
 
 // Connect to MySQL
 const db = mysql.createConnection({
-  host: '10.15.188.19',
-  user: 'root',       // default XAMPP username
-  password: '',       // leave empty unless you set one in phpMyAdmin
-  database: 'f28wp' // your database name
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'f28wp',
+  port: 3306
 });
 
 db.connect(err => {
@@ -34,3 +35,5 @@ app.get('/api/listings', (req, res) => {
 });
 
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));
+
+app.use(express.static('public'));
