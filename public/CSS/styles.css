@@ -739,3 +739,112 @@ form .section_break p
   margin: 10px 0 15px;
   color: gold;
 }
+
+/* ===========================
+   LISTINGS PAGE
+=========================== */
+
+#listings-header {
+  text-align: center;
+  padding: 40px 10%;
+}
+
+#listings-header h2 {
+  font-size: 2rem;
+}
+
+#listings-filters {
+  background: #383540;
+  padding: 20px 10%;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+#listings-filters select {
+  background: #A6A3AF;
+  border: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 10px;
+  color: #222;
+}
+
+#listings-container {
+  padding: 40px 10%;
+}
+
+#listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+
+/* ===========================
+   HOTEL LISTINGS BUTTON
+=========================== */
+
+.view-rooms-btn {
+    background: #BCB77B;
+    border: none;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 12px;
+    transition: background 0.2s ease;
+    font-weight: 600;
+}
+
+.view-rooms-btn:hover {
+    background: #a8a368;
+}
+
+#rooms-section {
+    padding: 40px 10%;
+}
+
+#rooms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.booking-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.booking-form label {
+    font-size: 14px;
+    color: #F0EEED;
+}
+
+.booking-form input {
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: none;
+    font-size: 14px;
+}
+
+.booking-form button {
+    padding: 8px;
+    border: none;
+    background: #BCB77B;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.booking-form button:hover {
+    background: #e03150;
+}
+
+.booking-form button:disabled {
+    background: #555;
+    cursor: not-allowed;
+}

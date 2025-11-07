@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Available Hotels</title>
+    <link rel="stylesheet" href="/CSS/styles.css" />
+</head>
+
+<body>
+
+    <!-- ✅ Navigation -->
+    <nav>
+        <h1><a href="/Pages/index.html">TravelScape</a></h1>
+        <button id="menu-toggle">☰</button>
+        <ul id="nav-links">
+            <li><a href="/Pages/index.html">Home</a></li>
+            <li><a href="/Pages/listings.html">Hotels</a></li>
+            <li><a href="/Pages/login.html">Login</a></li>
+        </ul>
+    </nav>
+
+    <!-- ✅ Header Section -->
+    <section id="destination-filters">
+        <h2>Available Hotels</h2>
+        <p>Browse all hotels, compare rooms, and find your perfect stay.</p>
+
+        <div class="filter-bar">
+            <!-- ✅ Filter by City -->
+            <select id="filterCity">
+                <option value="all">Filter by City</option>
+            </select>
+
+            <!-- ✅ Sort by Price -->
+            <select id="sortPrice">
+                <option value="none">Sort by Price</option>
+                <option value="asc">Price: Low → High</option>
+                <option value="desc">Price: High → Low</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- ✅ Hotel Grid -->
+    <section id="hotel-container" class="destination-grid">
+        <!-- Cards injected dynamically -->
+    </section>
+
+    <!-- ✅ Footer -->
+    <footer>
+        <div class="footer-section">
+            <h3>About</h3>
+            <ul>
+                <li><a href="#">Our Story</a></li>
+                <li><a href="#">Press</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <h3>Support</h3>
+            <ul>
+                <li><a href="#">Help Centre</a></li>
+                <li><a href="#">Cancellation Options</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- ✅ Page Logic -->
+    <script src="../JS/listings.js"></script>
+
+</body>
+</html>
