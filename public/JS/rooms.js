@@ -7,62 +7,70 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
     }
 
-    // Fetch all rooms for this hotel
-    const response = await fetch(`/api/hotel/${hotelID}/rooms`);
-    const data = await response.json();
+    try {
+        // Fetch hotel + rooms data
+        const response = await fetch(`/api/hotels/${hotelID}`);
+        if (!response.ok) throw new Error("Failed to fetch hotel data");
 
-    // Header information
-    document.getElementById("hotelName").textContent = data.hotelName;
-    document.getElementById("hotelAddress").textContent = data.address;
+        const data = await response.json();
 
-    // Group rooms by roomType
-    const grouped = {};
+        // Fill header info
+        document.getElementById("hotelName").textContent = data.hotelName;
+        document.getElementById("hotelAddress").textContent = data.address;
 
-    data.rooms.forEach(room => {
-        if (!grouped[room.roomType]) {
-            grouped[room.roomType] = { total: 0, available: 0 };
-        }
-        grouped[room.roomType].total++;
-        if (room.available) grouped[room.roomType].available++;
-    });
+        // Group rooms by type
+        const groupedRooms = {};
+        data.rooms.forEach(room => {
+            if (!groupedRooms[room.roomType]) {
+                groupedRooms[room.roomType] = { total: 0, available: 0 };
+            }
+            groupedRooms[room.roomType].total++;
+            if (room.available) groupedRooms[room.roomType].available++;
+        });
 
-    const container = document.getElementById("roomTypeContainer");
-    container.innerHTML = "";
+        const container = document.getElementById("roomTypeContainer");
+        container.innerHTML = "";
 
-    Object.entries(grouped).forEach(([type, info]) => {
-        const card = document.createElement("div");
-        card.classList.add("room-card");
+        // Create cards
+        Object.entries(groupedRooms).forEach(([type, info]) => {
+            const card = document.createElement("div");
+            card.classList.add("room-type-card");
 
-        const isAvailable = info.available > 0;
+            const isAvailable = info.available > 0;
 
-        card.innerHTML = `
-            <h3>${type}</h3>
-            <p><strong>Available:</strong> ${info.available > 0 ? info.available : "Unavailable"}</p>
-            <button ${isAvailable ? "" : "disabled"} data-type="${type}">
-                ${isAvailable ? "Book Now" : "Unavailable"}
-            </button>
-        `;
+            card.innerHTML = `
+                <h3>${type}</h3>
+                <p><strong>Available:</strong> ${info.available > 0 ? info.available : "Unavailable"}</p>
+                <button ${isAvailable ? "" : "disabled"} data-type="${type}">
+                    ${isAvailable ? "Book Now" : "Unavailable"}
+                </button>
+            `;
 
-        container.appendChild(card);
-    });
+            container.appendChild(card);
+        });
 
-    // Booking handler — books *first available* room of that type
-    container.addEventListener("click", async (e) => {
-        if (!e.target.matches("button[data-type]")) return;
+        // Booking click handler
+        container.addEventListener("click", async (e) => {
+            if (!e.target.matches("button[data-type]")) return;
 
-        const roomType = e.target.dataset.type;
+            const roomType = e.target.dataset.type;
 
-        // Find the first available room of that type
-        const availableRoom = data.rooms.find(
-            room => room.roomType === roomType && room.available == 1
-        );
+            // Find first available room of that type
+            const availableRoom = data.rooms.find(
+                room => room.roomType === roomType && room.available == 1
+            );
 
-        if (!availableRoom) {
-            alert("Sorry, no rooms available of this type.");
-            return;
-        }
+            if (!availableRoom) {
+                alert("Sorry, no rooms available of this type.");
+                return;
+            }
 
-        // Redirect to booking page (or popup)
-        window.location.href = `/Pages/booking.html?roomID=${availableRoom.roomID}`;
-    });
+            // Redirect to booking page
+            window.location.href = `/Pages/booking.html?roomID=${availableRoom.roomID}`;
+        });
+
+    } catch (err) {
+        console.error(err);
+        alert("An error occurred while loading rooms. Please try again later.");
+    }
 });

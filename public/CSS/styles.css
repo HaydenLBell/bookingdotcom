@@ -850,37 +850,21 @@ form .section_break p
 }
 
 /* ===========================
-   ROOMS PAGE
+   ROOMS PAGE CARDS
 =========================== */
-.rooms-section {
-  padding: 40px 10%;
-  background-color: #5C556E;
-  min-height: 100vh;
-}
-
-.rooms-container h1 {
-  font-size: 2rem;
-  margin-bottom: 5px;
-}
-
-.rooms-container p {
-  font-size: 1rem;
-  margin-bottom: 30px;
-  color: #DADADA;
-}
-
 .room-type-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
+  padding: 0;
 }
 
 .room-type-card {
-  background: linear-gradient(135deg, #494456, #5C556E); /* gradient for depth */
+  background-color: #A6A3AF; /* card background */
   border-radius: 14px;
-  padding: 25px 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* stronger shadow */
-  transition: transform 0.3s ease, background 0.3s ease;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -888,8 +872,9 @@ form .section_break p
 }
 
 .room-type-card:hover {
-  transform: translateY(-7px);
-  background: linear-gradient(135deg, #5C556E, #6C647D); /* lighter on hover */
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.35);
+  background-color: #BCB77B; /* subtle hover change */
 }
 
 .room-type-card h3 {
@@ -901,15 +886,15 @@ form .section_break p
 .room-type-card p {
   font-size: 1rem;
   margin-bottom: 15px;
-  color: #DADADA;
+  color: #222; /* slightly darker for readability */
 }
 
 .room-type-card button {
-  background: #BCB77B;
+  background-color: #5C556E;
   color: white;
   border: none;
   padding: 10px 18px;
-  border-radius: 10px;
+  border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
@@ -917,19 +902,94 @@ form .section_break p
 }
 
 .room-type-card button:hover {
-  background: #A8A368;
+  background-color: #383540;
   transform: translateY(-2px);
 }
 
 .room-type-card button:disabled {
-  background: #555;
+  background-color: #555;
   cursor: not-allowed;
   opacity: 0.7;
 }
 
-
+/* Responsive */
 @media (max-width: 600px) {
   .room-type-grid {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===========================
+   BOOKING PAGE CARD
+=========================== */
+#bookingContainer {
+    max-width: 500px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #494456, #5C556E);
+    padding: 30px 25px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    color: #FFFEFE;
+}
+
+#bookingContainer h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+#bookingContainer p {
+    font-size: 1rem;
+    margin-bottom: 25px;
+    color: #DADADA;
+}
+
+.booking-form label {
+    display: block;
+    font-size: 14px;
+    text-align: left;
+    margin-bottom: 5px;
+    color: #F0EEED;
+}
+
+.booking-form input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.booking-form button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #BCB77B;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.booking-form button:hover {
+    background: #A8A368;
+    transform: translateY(-2px);
+}
+
+.booking-form button:disabled {
+    background: #555;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    #bookingContainer {
+        padding: 20px 15px;
+    }
+}
+
