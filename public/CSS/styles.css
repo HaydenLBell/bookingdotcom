@@ -848,3 +848,88 @@ form .section_break p
     background: #555;
     cursor: not-allowed;
 }
+
+/* ===========================
+   ROOMS PAGE
+=========================== */
+.rooms-section {
+  padding: 40px 10%;
+  background-color: #5C556E;
+  min-height: 100vh;
+}
+
+.rooms-container h1 {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.rooms-container p {
+  font-size: 1rem;
+  margin-bottom: 30px;
+  color: #DADADA;
+}
+
+.room-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.room-type-card {
+  background: linear-gradient(135deg, #494456, #5C556E); /* gradient for depth */
+  border-radius: 14px;
+  padding: 25px 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4); /* stronger shadow */
+  transition: transform 0.3s ease, background 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.room-type-card:hover {
+  transform: translateY(-7px);
+  background: linear-gradient(135deg, #5C556E, #6C647D); /* lighter on hover */
+}
+
+.room-type-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #FFFEFE;
+}
+
+.room-type-card p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+  color: #DADADA;
+}
+
+.room-type-card button {
+  background: #BCB77B;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.room-type-card button:hover {
+  background: #A8A368;
+  transform: translateY(-2px);
+}
+
+.room-type-card button:disabled {
+  background: #555;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+
+@media (max-width: 600px) {
+  .room-type-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,84 +1,68 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const hotelID = urlParams.get("hotelID");
-    const hotelNameEl = document.getElementById("hotel-name");
-    const hotelAddressEl = document.getElementById("hotel-address");
-    const roomsGrid = document.getElementById("rooms-grid");
 
     if (!hotelID) {
-        roomsGrid.innerHTML = "<p>No hotel selected.</p>";
+        alert("No hotel selected.");
         return;
     }
 
-    // Fetch hotel and rooms
-    fetch(`/api/hotels/${hotelID}`)
-        .then(res => res.json())
-        .then(data => {
-            hotelNameEl.textContent = data.hotelName;
-            hotelAddressEl.textContent = data.address;
+    // Fetch all rooms for this hotel
+    const response = await fetch(`/api/hotel/${hotelID}/rooms`);
+    const data = await response.json();
 
-            roomsGrid.innerHTML = "";
+    // Header information
+    document.getElementById("hotelName").textContent = data.hotelName;
+    document.getElementById("hotelAddress").textContent = data.address;
 
-            data.rooms.forEach(room => {
-                const card = document.createElement("div");
-                card.classList.add("destination-card");
-                card.innerHTML = `
-                    <img src="../Resources/images/hotel-placeholder.png" alt="Room Image">
-                    <h3>${room.roomType}</h3>
-                    <p>Price per night: £${room.pricePerNight}</p>
-                    <p>Available: ${room.available ? "Yes" : "No"}</p>
-                    <form class="booking-form" data-roomid="${room.roomID}">
-                        <label>Check-in: <input type="date" name="checkin" required></label>
-                        <label>Nights: <input type="number" name="nights" min="1" value="1" required></label>
-                        <button type="submit" ${!room.available ? "disabled" : ""}>Book Now</button>
-                    </form>
-                `;
-                roomsGrid.appendChild(card);
-            });
-        })
-        .catch(err => {
-            console.error(err);
-            roomsGrid.innerHTML = "<p>Failed to load rooms.</p>";
-        });
+    // Group rooms by roomType
+    const grouped = {};
 
-    // Booking handler
-    roomsGrid.addEventListener("submit", e => {
-        e.preventDefault();
-        const form = e.target.closest(".booking-form");
-        if (!form) return;
+    data.rooms.forEach(room => {
+        if (!grouped[room.roomType]) {
+            grouped[room.roomType] = { total: 0, available: 0 };
+        }
+        grouped[room.roomType].total++;
+        if (room.available) grouped[room.roomType].available++;
+    });
 
-        const roomID = form.dataset.roomid;
-        const checkIn = form.checkin.value;
-        const nights = form.nights.value;
+    const container = document.getElementById("roomTypeContainer");
+    container.innerHTML = "";
 
-        const storedUser = JSON.parse(localStorage.getItem("user"));
-        if (!storedUser) {
-            alert("You must log in to book a room.");
+    Object.entries(grouped).forEach(([type, info]) => {
+        const card = document.createElement("div");
+        card.classList.add("room-card");
+
+        const isAvailable = info.available > 0;
+
+        card.innerHTML = `
+            <h3>${type}</h3>
+            <p><strong>Available:</strong> ${info.available > 0 ? info.available : "Unavailable"}</p>
+            <button ${isAvailable ? "" : "disabled"} data-type="${type}">
+                ${isAvailable ? "Book Now" : "Unavailable"}
+            </button>
+        `;
+
+        container.appendChild(card);
+    });
+
+    // Booking handler — books *first available* room of that type
+    container.addEventListener("click", async (e) => {
+        if (!e.target.matches("button[data-type]")) return;
+
+        const roomType = e.target.dataset.type;
+
+        // Find the first available room of that type
+        const availableRoom = data.rooms.find(
+            room => room.roomType === roomType && room.available == 1
+        );
+
+        if (!availableRoom) {
+            alert("Sorry, no rooms available of this type.");
             return;
         }
 
-        fetch("/api/book", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                userID: storedUser.id,
-                roomID,
-                checkInDate: checkIn,
-                numberOfNights: nights
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.error) alert(data.error);
-            else {
-                alert("Booking successful!");
-                form.querySelector("button").disabled = true;
-                form.closest(".destination-card").querySelector("p:nth-child(3)").textContent = "Available: No";
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("Booking failed. Try again.");
-        });
+        // Redirect to booking page (or popup)
+        window.location.href = `/Pages/booking.html?roomID=${availableRoom.roomID}`;
     });
 });

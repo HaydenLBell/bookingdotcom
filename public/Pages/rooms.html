@@ -1,41 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>notbookingdotcom | Rooms</title>
-    <link rel="stylesheet" href="../CSS/styles.css">
-    <link rel="icon" type="image/x-icon" href="../Resources/images/press.ico">
-    <script src="../JS/rooms.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rooms</title>
+  <link rel="stylesheet" href="../CSS/styles.css" />
+  <script src="../JS/rooms.js" defer></script>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <h1><a href="index.html">booking</a>dotcom</h1>
-        <button id="menu-toggle">☰</button>
-        <ul id="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="destinations.html">All Destinations</a></li>
-            <li><a href="listings.html">New Listings</a></li>
-            <li><a href="login.html">Log-in / Sign-Up</a></li>
-        </ul>
-    </nav>
 
-    <!-- Hotel Header -->
-    <section id="hotel-header">
-        <h2 id="hotel-name">Hotel Name</h2>
-        <p id="hotel-address">Hotel Address</p>
-    </section>
+  <nav>
+    <h1><a href="/Pages/index.html">TravelScape</a></h1>
+    <button id="menu-toggle">☰</button>
+    <ul id="nav-links">
+      <li><a href="/Pages/index.html">Home</a></li>
+      <li><a href="/Pages/listings.html">Hotels</a></li>
+      <li><a href="/Pages/login.html">Login</a></li>
+    </ul>
+  </nav>
 
-    <!-- Rooms Grid -->
-    <section id="rooms-section">
-        <h2>Available Rooms</h2>
-        <div id="rooms-grid" class="destination-grid"></div>
-    </section>
+  <section class="rooms-section">
+    <div class="rooms-container">
+      <h1 id="hotelName">Loading...</h1>
+      <p id="hotelAddress"></p>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 bookingdotcom, Inc.</p>
-    </footer>
+      <div id="roomTypeContainer" class="room-type-grid">
+        <!-- Cards injected dynamically via rooms.js -->
+      </div>
+    </div>
+  </section>
+
 </body>
 </html>
