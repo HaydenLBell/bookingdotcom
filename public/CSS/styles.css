@@ -993,3 +993,20 @@ form .section_break p
     }
 }
 
+.card {
+  background: #383540;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+.tab-btn {
+  background: transparent;
+  border: none;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.tab-btn.active {
+  background: #BCB77B;
+  color: #fff;
+  border-radius: 8px;
+}

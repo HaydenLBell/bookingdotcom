@@ -265,6 +265,179 @@ app.post("/api/book", (req, res) => {
     });
 });
 
+// -----------------------------
+// User bookings: list / edit / cancel
+// -----------------------------
+
+// Get bookings for a user (joins Bookings -> BookedRooms -> Rooms -> Hotels)
+app.get('/api/user/:id/bookings', (req, res) => {
+  const userID = req.params.id;
+
+  const sql = `
+    SELECT
+      B.bookingID,
+      B.userID,
+      B.checkInDate,
+      B.numberOfNights,
+      H.hotelID,
+      H.hotelName,
+      H.address,
+      R.roomID,
+      R.roomType,
+      R.pricePerNight
+    FROM Bookings B
+    JOIN BookedRooms BR ON B.bookingID = BR.bookingID
+    JOIN Rooms R ON BR.roomID = R.roomID
+    JOIN Hotels H ON B.hotelID = H.hotelID
+    WHERE B.userID = ?
+    ORDER BY B.checkInDate DESC
+  `;
+
+  db.query(sql, [userID], (err, rows) => {
+    if (err) {
+      console.error('Fetch bookings error:', err);
+      return res.status(500).json({ error: 'DB error', details: err.message });
+    }
+    res.json(rows);
+  });
+});
+
+// Edit booking (only checkInDate and numberOfNights)
+app.put('/api/bookings/:bookingID', (req, res) => {
+  const bookingID = req.params.bookingID;
+  const { userID, checkInDate, numberOfNights } = req.body;
+
+  if (userID == null || !checkInDate || !numberOfNights) {
+    return res.status(400).json({ error: 'Missing fields' });
+  }
+
+  // Verify ownership
+  db.query('SELECT userID FROM Bookings WHERE bookingID = ?', [bookingID], (err, rows) => {
+    if (err) {
+      console.error('Booking ownership check error:', err);
+      return res.status(500).json({ error: 'DB error' });
+    }
+    if (rows.length === 0) return res.status(404).json({ error: 'Booking not found' });
+    if (rows[0].userID !== Number(userID)) return res.status(403).json({ error: 'Not allowed' });
+
+    const sql = 'UPDATE Bookings SET checkInDate = ?, numberOfNights = ? WHERE bookingID = ?';
+    db.query(sql, [checkInDate, numberOfNights, bookingID], (err) => {
+      if (err) {
+        console.error('Update booking error:', err);
+        return res.status(500).json({ error: 'DB error' });
+      }
+      res.json({ message: 'Booking updated' });
+    });
+  });
+});
+
+// Cancel booking: free room(s), delete BookedRooms and Bookings
+app.delete('/api/bookings/:bookingID', (req, res) => {
+  const bookingID = req.params.bookingID;
+  const { userID } = req.body;
+
+  if (userID == null) return res.status(400).json({ error: 'Missing userID' });
+
+  // Verify ownership
+  db.query('SELECT userID FROM Bookings WHERE bookingID = ?', [bookingID], (err, rows) => {
+    if (err) {
+      console.error('Booking ownership check error:', err);
+      return res.status(500).json({ error: 'DB error' });
+    }
+    if (rows.length === 0) return res.status(404).json({ error: 'Booking not found' });
+    if (rows[0].userID !== Number(userID)) return res.status(403).json({ error: 'Not allowed' });
+
+    // Get roomIDs for this booking
+    db.query('SELECT roomID FROM BookedRooms WHERE bookingID = ?', [bookingID], (err, roomRows) => {
+      if (err) {
+        console.error('Select bookedrooms error:', err);
+        return res.status(500).json({ error: 'DB error' });
+      }
+
+      const roomIDs = roomRows.map(r => r.roomID);
+      // Mark each room available = 1
+      if (roomIDs.length > 0) {
+        db.query('UPDATE Rooms SET available = 1 WHERE roomID IN (?)', [roomIDs], (err) => {
+          if (err) console.error('Failed to free rooms:', err);
+          // continue even if free fails
+          // Delete bookedrooms then booking
+          db.query('DELETE FROM BookedRooms WHERE bookingID = ?', [bookingID], (err) => {
+            if (err) {
+              console.error('Delete BookedRooms error:', err);
+              return res.status(500).json({ error: 'DB error' });
+            }
+            db.query('DELETE FROM Bookings WHERE bookingID = ?', [bookingID], (err) => {
+              if (err) {
+                console.error('Delete Booking error:', err);
+                return res.status(500).json({ error: 'DB error' });
+              }
+              return res.json({ message: 'Booking cancelled' });
+            });
+          });
+        });
+      } else {
+        // No rooms linked (weird) — just delete booking
+        db.query('DELETE FROM Bookings WHERE bookingID = ?', [bookingID], (err) => {
+          if (err) {
+            console.error('Delete Booking error:', err);
+            return res.status(500).json({ error: 'DB error' });
+          }
+          return res.json({ message: 'Booking cancelled' });
+        });
+      }
+    });
+  });
+});
+
+app.put('/api/user/change-password', (req, res) => {
+  const { userID, oldPassword, newPassword } = req.body;
+  if (!userID || !oldPassword || !newPassword) return res.status(400).json({ error: 'Missing fields' });
+
+  // verify current password
+  db.query('SELECT psswrd FROM Users WHERE userID = ?', [userID], (err, rows) => {
+    if (err) return res.status(500).json({ error: 'DB error' });
+    if (rows.length === 0) return res.status(404).json({ error: 'User not found' });
+    if (rows[0].psswrd !== oldPassword) return res.status(400).json({ error: 'Current password incorrect' });
+
+    db.query('UPDATE Users SET psswrd = ? WHERE userID = ?', [newPassword, userID], (err) => {
+      if (err) return res.status(500).json({ error: 'DB error' });
+      res.json({ message: 'Password changed' });
+    });
+  });
+});
+
+app.delete('/api/user/:id', (req, res) => {
+  const userID = req.params.id;
+  // optionally verify body.userID matches or require password confirmation
+  // Remove user's bookings first (safe delete)
+  db.query('SELECT bookingID FROM Bookings WHERE userID = ?', [userID], (err, bookings) => {
+    if (err) return res.status(500).json({ error: 'DB error' });
+    const bookingIDs = bookings.map(b => b.bookingID);
+    if (bookingIDs.length > 0) {
+      // delete BookedRooms for bookings
+      db.query('DELETE FROM BookedRooms WHERE bookingID IN (?)', [bookingIDs], (err) => {
+        if (err) console.error(err);
+        // delete bookings
+        db.query('DELETE FROM Bookings WHERE bookingID IN (?)', [bookingIDs], (err) => {
+          if (err) console.error(err);
+          // continue to delete user
+          db.query('DELETE FROM Users WHERE userID = ?', [userID], (err) => {
+            if (err) return res.status(500).json({ error: 'DB error' });
+            res.json({ message: 'User deleted' });
+          });
+        });
+      });
+    } else {
+      // no bookings, just delete user
+      db.query('DELETE FROM Users WHERE userID = ?', [userID], (err) => {
+        if (err) return res.status(500).json({ error: 'DB error' });
+        res.json({ message: 'User deleted' });
+      });
+    }
+  });
+});
+
+
 // ------------------------------------------------
 //  START SERVER
 // ------------------------------------------------

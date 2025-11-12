@@ -1,174 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Account | notbookingdotcom</title>
-<link rel="stylesheet" href="/CSS/styles.css">
-<style>
-body {
-    font-family: 'Inter', Arial, sans-serif;
-    background-color: #5C556E;
-    color: #F0EEED;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-}
-
-nav {
-    width: 100%;
-    background-color: #383540;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-nav h1 a {
-    color: #BCB77B;
-    text-decoration: none;
-    font-size: 1.8rem;
-}
-
-.account-container {
-    background-color: #383540;
-    border-radius: 15px;
-    padding: 40px;
-    margin-top: 100px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    text-align: center;
-    width: 90%;
-    max-width: 400px;
-}
-
-.account-container h2 {
-    color: #BCB77B;
-    margin-bottom: 15px;
-}
-
-.account-container p {
-    font-size: 1rem;
-    margin-bottom: 20px;
-}
-
-#logoutBtn {
-    background-color: #BCB77B;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: 0.3s;
-}
-
-#logoutBtn:hover {
-    background-color: #e03150;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My Account — notbookingdotcom</title>
+  <link rel="stylesheet" href="/CSS/styles.css" />
 </head>
 <body>
-<!-- Navigation Bar -->
-    <nav>
-        <h1><a href="index.html">booking</a>dotcom</h1>
+  <nav>
+    <h1><a href="/Pages/index.html">booking</a>dotcom</h1>
+    <ul id="nav-links">
+      <li><a href="/Pages/index.html">Home</a></li>
+      <li><a href="/Pages/listings.html">Hotels</a></li>
+      <li><a href="/Pages/login.html">Login</a></li>
+    </ul>
+  </nav>
 
-        <div class="airbnb-search">
-            <div class="search-section">
-                <label for="where">Where</label>
-                <input type="text" id="where" placeholder="Search destinations">
-            </div>
+  <section style="padding:40px 10%;">
+    
+    <h2>Your Account</h2>
 
-            <div class="search-section">
-                <label for="checkin">Check in</label>
-                <input type="date" id="checkin">
-            </div>
-
-            <div class="search-section">
-                <label for="checkout">Check out</label>
-                <input type="date" id="checkout">
-            </div>
-
-            <div class="search-section" id="guestsSection">
-                <label for="guests">Who</label>
-                <input type="text" id="guests" placeholder="Add guests" readonly>
-                <div class="guests-dropdown" id="guestsDropdown">
-                    <div class="guest-row">
-                        <span>Adults</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="adults">0</span>
-                            <button class="increase">+</button>
-                        </div>
-                    </div>
-                    <div class="guest-row">
-                        <span>Children</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="children">0</span>
-                            <button class="increase">+</button>
-                        </div>
-                    </div>
-                    <div class="guest-row">
-                        <span>Infants</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="infants">0</span>
-                            <button class="increase">+</button>
-                        </div>
-                    </div>
-                    <div class="guest-row">
-                        <span>Pets</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="pets">0</span>
-                            <button class="increase">+</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button class="search-btn">🔍</button>
-        </div>
-
-        <button id="menu-toggle">☰</button>
-        <ul id="nav-links">
-            <li><a href="/Pages/index.html">Home</a></li>
-            <li><a href="/Pages/destinations.html">All Destinations</a></li>
-            <li><a href="listings.html">New Listings</a></li>
-            <li><a href="account.html">Account</a></li>
-        </ul>
-    </nav>
-
-    <div class="account-container">
-        <h2>Your Account</h2>
-        <p id="userInfo"></p>
-        <button id="logoutBtn">Logout</button>
+    <!-- ACCOUNT DETAILS -->
+    <div id="accountDetails" class="destination-card" style="margin-bottom:40px; padding:20px;">
+      <h3>Your Details</h3>
+      <p><strong>Name:</strong> <span id="accName"></span></p>
+      <p><strong>Email:</strong> <span id="accEmail"></span></p>
+      <p><strong>User ID:</strong> <span id="accUserID"></span></p>
+      <p><strong>Account Type:</strong> <span id="accRole"></span></p>
     </div>
 
-    <script>
-    // Get user data from localStorage
-    const user = JSON.parse(localStorage.getItem('user'));
-    const userInfo = document.getElementById('userInfo');
-    const logoutBtn = document.getElementById('logoutBtn');
+    <!-- BOOKINGS -->
+    <h2>Your Bookings</h2>
+    <p id="noBookings" style="display:none;">You have no bookings yet.</p>
+    <div id="bookingsContainer" class="destination-grid"></div>
+  </section>
 
-    if (!user) {
-        // If not logged in, redirect to login page
-        window.location.href = '/Pages/login.html';
-    } else {
-        // Show user info
-        userInfo.innerHTML = `
-            <strong>Name:</strong> ${user.fname} ${user.lname}<br>
-            <strong>Email:</strong> ${user.email}<br>
-            <strong>Admin:</strong> ${user.isAdmin ? 'Yes' : 'No'}
-        `;
-    }
+  <footer></footer>
 
-    // Logout button clears localStorage and redirects
-    logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('user');
-        window.location.href = '/Pages/login.html';
-    });
-    </script>
+  <script src="/JS/account.js" defer></script>
 </body>
 </html>
