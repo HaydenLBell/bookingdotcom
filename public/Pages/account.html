@@ -3,12 +3,135 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>My Account — notbookingdotcom</title>
-  <link rel="stylesheet" href="/CSS/styles.css" />
+  <title>Account | notbookingdotcom</title>
+
+  <!-- Use your main site stylesheet -->
+  <link rel="stylesheet" href="/CSS/styles.css">
+
+  <!-- Small page-specific tweaks that follow your palette -->
+  <style>
+    /* Container placement */
+    .account-wrap {
+      max-width: 960px;
+      margin: 48px auto;
+      padding: 20px;
+    }
+
+    /* Tabs bar */
+    .tabs-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 10px 14px;
+      cursor: pointer;
+      color: #F0EEED;
+      font-weight: 600;
+      border-radius: 8px;
+      transition: background 0.18s ease, color 0.18s ease;
+    }
+
+    .tab-btn.active {
+      background: #BCB77B; /* site accent */
+      color: #161616;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    /* On small screens, single column */
+    @media (max-width: 900px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .right-col { order: -1; } /* move account summary on top for mobile */
+    }
+
+    /* a card-like panel using your .card base */
+    .panel {
+      padding: 18px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      color: #F0EEED;
+    }
+
+    .info-row {
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      margin: 8px 0;
+      align-items:center;
+    }
+
+    .info-row strong { color: #BCB77B; }
+
+    /* bookings list */
+    .booking-card {
+      background: #383540;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .booking-meta {
+      font-size: 0.95rem;
+      color: #DADADA;
+      margin-top: 8px;
+    }
+
+    .booking-actions {
+      display:flex;
+      gap:8px;
+      margin-top:10px;
+    }
+
+    .btn-small {
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-edit { background: #BCB77B; color:#161616; }
+    .btn-cancel { background: #FF6B6B; color: white; }
+
+    /* subtle headings */
+    .panel h2 {
+      margin: 0 0 12px 0;
+      font-size: 1.2rem;
+      color: #FFFEFE;
+    }
+
+    .muted { color: #DADADA; font-size: 0.95rem; }
+  </style>
 </head>
 <body>
+
+  <!-- Use your site's nav to keep consistent header -->
   <nav>
     <h1><a href="/Pages/index.html">booking</a>dotcom</h1>
+
+    <div class="airbnb-search" style="flex:1; max-width:520px; margin:0 20px;">
+      <!-- (kept minimal so nav stays identical) -->
+      <div class="search-section">
+        <label for="where">Where</label>
+        <input type="text" id="where" placeholder="Search destinations">
+      </div>
+    </div>
+
+    <button id="menu-toggle">☰</button>
     <ul id="nav-links">
       <li><a href="/Pages/index.html">Home</a></li>
       <li><a href="/Pages/listings.html">Hotels</a></li>
@@ -16,27 +139,150 @@
     </ul>
   </nav>
 
-  <section style="padding:40px 10%;">
-    
-    <h2>Your Account</h2>
+  <main class="account-wrap">
 
-    <!-- ACCOUNT DETAILS -->
-    <div id="accountDetails" class="destination-card" style="margin-bottom:40px; padding:20px;">
-      <h3>Your Details</h3>
-      <p><strong>Name:</strong> <span id="accName"></span></p>
-      <p><strong>Email:</strong> <span id="accEmail"></span></p>
-      <p><strong>User ID:</strong> <span id="accUserID"></span></p>
-      <p><strong>Account Type:</strong> <span id="accRole"></span></p>
+    <!-- Top: heading + tabs -->
+    <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+      <div>
+        <h1 style="margin:0 0 4px 0;">My Account</h1>
+        <div class="muted">Manage your profile, bookings and security</div>
+      </div>
+
+      <div class="tabs-row" role="tablist" aria-label="Account tabs">
+        <button class="tab-btn active" data-tab="tab-details">Account Details</button>
+        <button class="tab-btn" data-tab="tab-bookings">My Bookings</button>
+        <button class="tab-btn" data-tab="tab-security">Security</button>
+      </div>
+    </header>
+
+    <!-- Two-column content: left = main, right = summary -->
+    <div class="content-grid">
+
+      <!-- LEFT COLUMN -->
+      <section class="left-col">
+
+        <!-- ACCOUNT DETAILS (tab content) -->
+        <div id="tab-details" class="panel tab-content" style="display:block;">
+          <h2>Account Information</h2>
+
+          <div class="info-row">
+            <div><strong>First name</strong></div>
+            <div id="acc-fname">—</div>
+          </div>
+
+          <div class="info-row">
+            <div><strong>Last name</strong></div>
+            <div id="acc-lname">—</div>
+          </div>
+
+          <div class="info-row">
+            <div><strong>Email</strong></div>
+            <div id="acc-email">—</div>
+          </div>
+
+          <div class="info-row">
+            <div><strong>Account type</strong></div>
+            <div id="acc-type">—</div>
+          </div>
+        </div>
+
+        <!-- BOOKINGS tab -->
+        <div id="tab-bookings" class="panel tab-content" style="display:none;">
+          <h2>My Bookings</h2>
+          <div id="booking-list">
+            <!-- booking cards will be injected by account.js -->
+            <div class="muted">Loading bookings…</div>
+          </div>
+        </div>
+
+        <!-- SECURITY tab -->
+        <div id="tab-security" class="panel tab-content" style="display:none;">
+          <h2>Security</h2>
+
+          <div style="margin-bottom:12px;">
+            <label for="currentPassword" style="display:block;margin-bottom:6px;color:#DADADA;">Current password</label>
+            <input id="currentPassword" type="password" placeholder="Current password" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label for="newPassword" style="display:block;margin-bottom:6px;color:#DADADA;">New password</label>
+            <input id="newPassword" type="password" placeholder="New password" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
+          </div>
+
+          <div style="display:flex;gap:10px;">
+            <button id="btn-change-password" class="btn-small btn-edit">Change password</button>
+            <button id="btn-delete-account" class="btn-small btn-cancel">Delete account</button>
+          </div>
+
+          <div id="security-msg" style="margin-top:12px;color:#DADADA;"></div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT COLUMN (summary / quick actions) -->
+      <aside class="right-col">
+        <div class="panel">
+          <h2>Profile</h2>
+
+          <div style="text-align:center; margin-bottom:12px;">
+            <div style="width:72px;height:72px;border-radius:50%;background:#BCB77B;display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:#161616;font-size:22px;">
+              <span id="acc-initial">H</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <div><strong>Name</strong></div>
+            <div id="acc-name">—</div>
+          </div>
+
+          <div class="info-row">
+            <div><strong>Email</strong></div>
+            <div id="acc-email-2">—</div>
+          </div>
+
+          <div style="margin-top:16px;text-align:center;">
+            <button id="btn-logout" class="view-rooms-btn" style="width:100%;">Logout</button>
+          </div>
+        </div>
+
+        <div class="panel" style="margin-top:14px;">
+          <h2>Quick actions</h2>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <a href="/Pages/listings.html" class="view-rooms-btn" style="text-align:center;">Browse hotels</a>
+            <a href="/Pages/index.html" class="view-rooms-btn" style="text-align:center;">Return home</a>
+          </div>
+        </div>
+      </aside>
     </div>
+  </main>
 
-    <!-- BOOKINGS -->
-    <h2>Your Bookings</h2>
-    <p id="noBookings" style="display:none;">You have no bookings yet.</p>
-    <div id="bookingsContainer" class="destination-grid"></div>
-  </section>
+  <!-- your account JS (rewritten earlier / to be added) -->
+  <script src="/JS/account.js"></script>
 
-  <footer></footer>
+  <!-- Small inline tab switching to ensure UI works even before JS loads -->
+  <script>
+    (function () {
+      const tabs = document.querySelectorAll('.tab-btn');
+      const contents = document.querySelectorAll('.tab-content');
 
-  <script src="/JS/account.js" defer></script>
+      function showTab(tabName) {
+        contents.forEach(c => c.style.display = 'none');
+        tabs.forEach(t => t.classList.remove('active'));
+        const target = document.getElementById(tabName);
+        if (target) target.style.display = 'block';
+        const btn = Array.from(tabs).find(b => b.dataset.tab === tabName);
+        if (btn) btn.classList.add('active');
+      }
+
+      tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+          showTab(btn.dataset.tab);
+        });
+      });
+
+      // expose for account.js if needed
+      window.showAccountTab = showTab;
+    })();
+  </script>
 </body>
 </html>
