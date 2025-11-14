@@ -9,15 +9,109 @@
 </head>
 <body>
 
-  <nav>
-    <h1><a href="/Pages/index.html">TravelScape</a></h1>
-    <button id="menu-toggle">☰</button>
-    <ul id="nav-links">
-      <li><a href="/Pages/index.html">Home</a></li>
-      <li><a href="/Pages/listings.html">Hotels</a></li>
-      <li><a href="/Pages/login.html">Login</a></li>
-    </ul>
-  </nav>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.getElementById('nav-links');
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+
+    if (storedUser) {
+        // Remove login/signup link
+        const loginItem = [...navLinks.children].find(li => li.textContent.includes('Log-in'));
+        if (loginItem) navLinks.removeChild(loginItem);
+
+        // Add account + logout
+        const accountItem = document.createElement('li');
+        accountItem.innerHTML = `<a href="/Pages/account.html">Account (${storedUser.fname || storedUser.email})</a>`;
+        navLinks.appendChild(accountItem);
+
+        const logoutItem = document.createElement('li');
+        logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
+        navLinks.appendChild(logoutItem);
+
+        // Handle logout click
+        document.getElementById('logout-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('user');
+            window.location.reload();
+        });
+    }
+});
+</script>
+
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <h1><a href="index.html">Bookly</a>dotcom</h1>
+
+        <div class="airbnb-search">
+            <div class="search-section">
+                <label for="where">Where</label>
+                <input type="text" id="where" placeholder="Search destinations">
+            </div>
+
+            <div class="search-section">
+                <label for="checkin">Check in</label>
+                <input type="date" id="checkin">
+            </div>
+
+            <div class="search-section">
+                <label for="checkout">Check out</label>
+                <input type="date" id="checkout">
+            </div>
+
+            <div class="search-section" id="guestsSection">
+                <label for="guests">Who</label>
+                <input type="text" id="guests" placeholder="Add guests" readonly>
+                <div class="guests-dropdown" id="guestsDropdown">
+                    <div class="guest-row">
+                        <span>Adults</span>
+                        <div class="guest-controls">
+                            <button class="decrease">-</button>
+                            <span class="count" data-type="adults">0</span>
+                            <button class="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="guest-row">
+                        <span>Children</span>
+                        <div class="guest-controls">
+                            <button class="decrease">-</button>
+                            <span class="count" data-type="children">0</span>
+                            <button class="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="guest-row">
+                        <span>Infants</span>
+                        <div class="guest-controls">
+                            <button class="decrease">-</button>
+                            <span class="count" data-type="infants">0</span>
+                            <button class="increase">+</button>
+                        </div>
+                    </div>
+                    <div class="guest-row">
+                        <span>Pets</span>
+                        <div class="guest-controls">
+                            <button class="decrease">-</button>
+                            <span class="count" data-type="pets">0</span>
+                            <button class="increase">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="search-btn">🔍</button>
+        </div>
+
+        <button id="menu-toggle">☰</button>
+        <ul id="nav-links">
+            <li><a href="/Pages/index.html">Home</a></li>
+            <li><a href="/Pages/destinations.html">All Destinations</a></li>
+            <li><a href="/Pages/listings.html">Browse Hotels</a></li>
+            <li><a href="/Pages/login.html">Log-in / Sign-Up</a></li>
+        </ul>
+    </nav>
+
 
   <section class="rooms-section">
     <div class="rooms-container">
