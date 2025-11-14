@@ -1010,3 +1010,99 @@ form .section_break p
   color: #fff;
   border-radius: 8px;
 }
+
+/* ===========================
+   LOGIN PAGE STYLES
+=========================== */
+/* ===========================
+   LOGIN CONTAINER
+=========================== */
+
+.login-container {
+  background-color: #383540;
+  padding: 40px 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  box-sizing: border-box;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container h1 {
+  color: #BCB77B;
+  margin-bottom: 15px;
+}
+
+.login-container h2 {
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.login-container p {
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+/* ===========================
+ FORM STYLING
+=========================== */
+.login-container label {
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+  font-weight: 500;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px 15px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+}
+
+.login-container input:focus {
+  border: 2px solid #BCB77B;
+}
+
+.login-container button {
+  background-color: #BCB77B;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  transition: 0.3s;
+}
+
+.login-container button:hover {
+  background-color: #e03150;
+}
+
+.signup-link {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.signup-link a {
+  color: #BCB77B;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  color: #e03150;
+}
+
+.error-msg {
+  color: #ff4d4d;
+  font-size: 14px;
+  margin-top: 10px;
+}

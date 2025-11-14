@@ -6,7 +6,7 @@
   <title>Account | Booklydotcom</title>
 
   <!-- Use your main site stylesheet -->
-  <link rel="stylesheet" href="/CSS/styles.css">
+  <link rel="stylesheet" href="../CSS/styles.css">
 
   <!-- Small page-specific tweaks that follow your palette -->
   <style>
@@ -139,12 +139,18 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
         navLinks.appendChild(logoutItem);
 
+        const adminTab = document.createElement('button');
+        adminTab.
+
         // Handle logout click
         document.getElementById('logout-link').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('user');
             window.location.reload();
         });
+
+        // Check if user needs admin privilages
+        document.getElementByID
     }
 });
 </script>
