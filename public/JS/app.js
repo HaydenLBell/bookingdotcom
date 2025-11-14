@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   // ===========================
   // NAV MENU TOGGLE
   // ===========================
@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const navMenu = document.getElementById("nav-links");
 
   if (menuToggle && navMenu) {
-    menuToggle.addEventListener("click", function () {
+    menuToggle.addEventListener("click", () => {
       navMenu.classList.toggle("active");
     });
   }
@@ -36,8 +36,12 @@ document.addEventListener("DOMContentLoaded", function() {
       btn.addEventListener("click", () => {
         const countSpan = btn.parentElement.querySelector(".count");
         let count = parseInt(countSpan.textContent);
-        if (btn.classList.contains("increase")) count++;
-        else if (count > 0) count--;
+
+        if (btn.classList.contains("increase")) {
+          count++;
+        } else if (count > 0) {
+          count--;
+        }
 
         countSpan.textContent = count;
         updateGuestsInput();
@@ -61,15 +65,46 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // ===========================
+  // SEARCH BAR FILTER LOGIC
+  // ===========================
+  const searchInput = document.getElementById("searchBar");
+  const destinationCards = document.querySelectorAll(".destination-card");
+
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      const query = searchInput.value.toLowerCase();
+
+      destinationCards.forEach(card => {
+        const title = card.querySelector("h3")?.textContent.toLowerCase() || "";
+        const description = card.querySelector("p")?.textContent.toLowerCase() || "";
+        const altText = card.querySelector("img")?.alt.toLowerCase() || "";
+
+        // Show the card if ANY field matches
+        if (
+          title.includes(query) ||
+          description.includes(query) ||
+          altText.includes(query)
+        ) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  }
+
+
+  // ===========================
   // STAR RATING LOGIC (Optional)
   // ===========================
-  document.querySelectorAll(".rating span").forEach(star => {
-    star.addEventListener("click", function() {
-      let parent = this.parentElement;
-      let allStars = parent.querySelectorAll("span");
-      allStars.forEach(s => s.classList.remove("active"));
-      this.classList.add("active");
-      let index = Array.from(allStars).indexOf(this);
+  document.querySelectorAll(".rating span").forEach((star) => {
+    star.addEventListener("click", function () {
+      const parent = this.parentElement;
+      const allStars = parent.querySelectorAll("span");
+
+      allStars.forEach((s) => s.classList.remove("active"));
+
+      const index = Array.from(allStars).indexOf(this);
       for (let i = 0; i <= index; i++) {
         allStars[i].classList.add("active");
       }
