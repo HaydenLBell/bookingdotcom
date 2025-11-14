@@ -18,55 +18,59 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("hotelName").textContent = data.hotelName;
         document.getElementById("hotelAddress").textContent = data.address;
 
+        const container = document.getElementById("roomTypeContainer");
+        container.innerHTML = "";
+
+        // Room images mapping
+        const roomImages = {
+            "Single": "/Resources/images/rooms/single.jpg",
+            "Double": "/Resources/images/rooms/double.jpg",
+            "Suite": "/Resources/images/rooms/suite.jpg",
+            "Deluxe": "/Resources/images/rooms/deluxe.jpg"
+        };
+
         // Group rooms by type
         const groupedRooms = {};
         data.rooms.forEach(room => {
             if (!groupedRooms[room.roomType]) {
-                groupedRooms[room.roomType] = { total: 0, available: 0 };
+                groupedRooms[room.roomType] = [];
             }
-            groupedRooms[room.roomType].total++;
-            if (room.available) groupedRooms[room.roomType].available++;
+            groupedRooms[room.roomType].push(room);
         });
 
-        const container = document.getElementById("roomTypeContainer");
-        container.innerHTML = "";
-
         // Create cards
-        Object.entries(groupedRooms).forEach(([type, info]) => {
-            const card = document.createElement("div");
-            card.classList.add("room-type-card");
+        Object.entries(groupedRooms).forEach(([type, rooms]) => {
+            const availableCount = rooms.filter(r => r.available).length;
+            const isAvailable = availableCount > 0;
+            const firstAvailableRoom = rooms.find(r => r.available);
 
-            const isAvailable = info.available > 0;
+            const card = document.createElement("div");
+            card.classList.add("room-card");
 
             card.innerHTML = `
-                <h3>${type}</h3>
-                <p><strong>Available:</strong> ${info.available > 0 ? info.available : "Unavailable"}</p>
-                <button ${isAvailable ? "" : "disabled"} data-type="${type}">
-                    ${isAvailable ? "Book Now" : "Unavailable"}
-                </button>
+                <img src="${roomImages[type] || '/Resources/rooms/default.jpg'}" alt="${type} Room">
+                <div class="room-info">
+                    <h3>${type} Room</h3>
+                    <div class="room-price">£${Math.min(...rooms.map(r => r.pricePerNight))}/night</div>
+                    <div class="room-status ${isAvailable ? 'available' : 'unavailable'}">
+                        ${isAvailable ? availableCount + ' available' : 'Fully booked'}
+                    </div>
+                    <button ${isAvailable ? "" : "disabled"} data-room-id="${firstAvailableRoom?.roomID || ''}">
+                        ${isAvailable ? "Book Now" : "Unavailable"}
+                    </button>
+                </div>
             `;
 
             container.appendChild(card);
         });
 
         // Booking click handler
-        container.addEventListener("click", async (e) => {
-            if (!e.target.matches("button[data-type]")) return;
+        container.addEventListener("click", (e) => {
+            const btn = e.target.closest("button[data-room-id]");
+            if (!btn || !btn.dataset.roomId) return;
 
-            const roomType = e.target.dataset.type;
-
-            // Find first available room of that type
-            const availableRoom = data.rooms.find(
-                room => room.roomType === roomType && room.available == 1
-            );
-
-            if (!availableRoom) {
-                alert("Sorry, no rooms available of this type.");
-                return;
-            }
-
-            // Redirect to booking page
-            window.location.href = `/Pages/booking.html?roomID=${availableRoom.roomID}`;
+            const roomID = btn.dataset.roomId;
+            window.location.href = `/Pages/booking.html?roomID=${roomID}`;
         });
 
     } catch (err) {
