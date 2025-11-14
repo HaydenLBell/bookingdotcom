@@ -5,17 +5,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let hotels = [];
 
+    // Read URL parameters
+    const params = new URLSearchParams(window.location.search);
+    const initialCityFilter = params.get("city"); // e.g. "Paris"
+
+
     // ✅ Fetch hotel data
     async function loadHotels() {
         const res = await fetch("/api/hotels");
         hotels = await res.json();
+
         populateCityFilter();
-        renderHotels(hotels);
+
+        // If listings.html?city=Something → auto filter
+        if (initialCityFilter && initialCityFilter !== "all") {
+            filterCity.value = initialCityFilter; // set dropdown
+
+            const filtered = hotels.filter(
+                h => extractCity(h.address).toLowerCase() === initialCityFilter.toLowerCase()
+            );
+
+            renderHotels(applySort(filtered));
+        } else {
+            renderHotels(hotels);
+        }
     }
 
     // ✅ Populate unique cities
     function populateCityFilter() {
-        const cities = [...new Set(hotels.map(h => extractCity(h.address)))];
+        const cities = [...new Set(hotels.map(h => extractCity(h.address)))].sort();
 
         cities.forEach(city => {
             const opt = document.createElement("option");
@@ -61,19 +79,28 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ✅ Apply Filters + Sorting
+    // ✅ Filter logic
     filterCity.addEventListener("change", () => {
         let filtered = hotels;
 
         if (filterCity.value !== "all") {
-            filtered = hotels.filter(h => extractCity(h.address) === filterCity.value);
+            filtered = hotels.filter(
+                h => extractCity(h.address) === filterCity.value
+            );
         }
 
         renderHotels(applySort(filtered));
     });
 
+    // ✅ Sorting logic
     sortPrice.addEventListener("change", () => {
-        renderHotels(applySort(hotels));
+        let list = hotels;
+
+        if (filterCity.value !== "all") {
+            list = hotels.filter(h => extractCity(h.address) === filterCity.value);
+        }
+
+        renderHotels(applySort(list));
     });
 
     function applySort(list) {

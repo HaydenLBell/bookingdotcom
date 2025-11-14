@@ -3,25 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>notbookingdotcom | All Destinations</title>
+  <title>All Destinations | Booklydotcom</title>
   <link rel="stylesheet" href="/CSS/styles.css">
   <link rel="icon" type="image/x-icon" href="/Resources/images/press.ico">
   <script src="/JS/app.js" defer></script>
 </head>
+
 <body>
 
-  <!-- Navigation Bar -->
-  <script>
+<!-- Navigation Script -->
+<script>
 document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.getElementById('nav-links');
     const storedUser = JSON.parse(localStorage.getItem('user'));
 
     if (storedUser) {
-        // Remove login/signup link
         const loginItem = [...navLinks.children].find(li => li.textContent.includes('Log-in'));
         if (loginItem) navLinks.removeChild(loginItem);
 
-        // Add account + logout
         const accountItem = document.createElement('li');
         accountItem.innerHTML = `<a href="/Pages/account.html">Account (${storedUser.fname || storedUser.email})</a>`;
         navLinks.appendChild(accountItem);
@@ -30,211 +29,219 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
         navLinks.appendChild(logoutItem);
 
-        // Handle logout click
         document.getElementById('logout-link').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('user');
             window.location.reload();
         });
     }
+
+    // Clickable destination cards
+    const destinationCards = document.querySelectorAll(".destination-card");
+
+    destinationCards.forEach(card => {
+        card.addEventListener("click", () => {
+            const city = card.querySelector("h3").textContent.trim();
+            window.location.href = `/Pages/listings.html?city=${encodeURIComponent(city)}`;
+        });
+    });
 });
 </script>
 
+<!-- Navigation Bar -->
+<nav>
+    <h1><a href="index.html">Bookly</a>dotcom</h1>
 
-<body>
+    <div class="airbnb-search">
+        <div class="search-section">
+            <label for="where">Where</label>
+            <input type="text" id="where" placeholder="Search destinations">
+        </div>
 
-    <!-- Navigation Bar -->
-    <nav>
-        <h1><a href="index.html">Bookly</a>dotcom</h1>
+        <div class="search-section">
+            <label for="checkin">Check in</label>
+            <input type="date" id="checkin">
+        </div>
 
-        <div class="airbnb-search">
-            <div class="search-section">
-                <label for="where">Where</label>
-                <input type="text" id="where" placeholder="Search destinations">
-            </div>
+        <div class="search-section">
+            <label for="checkout">Check out</label>
+            <input type="date" id="checkout">
+        </div>
 
-            <div class="search-section">
-                <label for="checkin">Check in</label>
-                <input type="date" id="checkin">
-            </div>
-
-            <div class="search-section">
-                <label for="checkout">Check out</label>
-                <input type="date" id="checkout">
-            </div>
-
-            <div class="search-section" id="guestsSection">
-                <label for="guests">Who</label>
-                <input type="text" id="guests" placeholder="Add guests" readonly>
-                <div class="guests-dropdown" id="guestsDropdown">
-                    <div class="guest-row">
-                        <span>Adults</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="adults">0</span>
-                            <button class="increase">+</button>
-                        </div>
+        <div class="search-section" id="guestsSection">
+            <label for="guests">Who</label>
+            <input type="text" id="guests" placeholder="Add guests" readonly>
+            <div class="guests-dropdown" id="guestsDropdown">
+                <div class="guest-row">
+                    <span>Adults</span>
+                    <div class="guest-controls">
+                        <button class="decrease">-</button>
+                        <span class="count" data-type="adults">0</span>
+                        <button class="increase">+</button>
                     </div>
-                    <div class="guest-row">
-                        <span>Children</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="children">0</span>
-                            <button class="increase">+</button>
-                        </div>
+                </div>
+                <div class="guest-row">
+                    <span>Children</span>
+                    <div class="guest-controls">
+                        <button class="decrease">-</button>
+                        <span class="count" data-type="children">0</span>
+                        <button class="increase">+</button>
                     </div>
-                    <div class="guest-row">
-                        <span>Infants</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="infants">0</span>
-                            <button class="increase">+</button>
-                        </div>
+                </div>
+                <div class="guest-row">
+                    <span>Infants</span>
+                    <div class="guest-controls">
+                        <button class="decrease">-</button>
+                        <span class="count" data-type="infants">0</span>
+                        <button class="increase">+</button>
                     </div>
-                    <div class="guest-row">
-                        <span>Pets</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="pets">0</span>
-                            <button class="increase">+</button>
-                        </div>
+                </div>
+                <div class="guest-row">
+                    <span>Pets</span>
+                    <div class="guest-controls">
+                        <button class="decrease">-</button>
+                        <span class="count" data-type="pets">0</span>
+                        <button class="increase">+</button>
                     </div>
                 </div>
             </div>
-
-            <button class="search-btn">🔍</button>
         </div>
 
-        <button id="menu-toggle">☰</button>
-        <ul id="nav-links">
-            <li><a href="/Pages/index.html">Home</a></li>
-            <li><a href="/Pages/destinations.html">All Destinations</a></li>
-            <li><a href="/Pages/listings.html">Browse Hotels</a></li>
-            <li><a href="/Pages/login.html">Log-in / Sign-Up</a></li>
-        </ul>
-    </nav>
+        <button class="search-btn">🔍</button>
+    </div>
 
-  <!-- Filters Section -->
-  <section id="destination-filters">
+    <button id="menu-toggle">☰</button>
+    <ul id="nav-links">
+        <li><a href="/Pages/index.html">Home</a></li>
+        <li><a href="/Pages/destinations.html">All Destinations</a></li>
+        <li><a href="/Pages/listings.html">Browse Hotels</a></li>
+        <li><a href="/Pages/login.html">Log-in / Sign-Up</a></li>
+    </ul>
+</nav>
+
+<!-- Filters Section -->
+<section id="destination-filters">
     <h2>Explore All Destinations</h2>
     <div class="filter-bar">
-      <select>
-        <option>Sort by Popularity</option>
-        <option>Sort by Rating</option>
-        <option>Sort by Price (Low → High)</option>
-      </select>
+        <select>
+            <option>Sort by Popularity</option>
+            <option>Sort by Rating</option>
+            <option>Sort by Price (Low → High)</option>
+        </select>
 
-      <select>
-        <option>All Regions</option>
-        <option>Europe</option>
-        <option>Asia</option>
-        <option>North America</option>
-        <option>South America</option>
-        <option>Oceania</option>
-      </select>
+        <select>
+            <option>All Regions</option>
+            <option>Europe</option>
+            <option>Asia</option>
+            <option>North America</option>
+            <option>South America</option>
+            <option>Oceania</option>
+        </select>
 
-      <select>
-        <option>All Types</option>
-        <option>Beach</option>
-        <option>City</option>
-        <option>Mountain</option>
-        <option>Rural</option>
-      </select>
+        <select>
+            <option>All Types</option>
+            <option>Beach</option>
+            <option>City</option>
+            <option>Mountain</option>
+            <option>Rural</option>
+        </select>
     </div>
-  </section>
+</section>
 
-  <!-- Destinations Grid -->
-  <section id="all-destinations">
+<!-- Destinations Grid -->
+<section id="all-destinations">
     <div class="destination-grid">
-      <div class="destination-card">
-        <img src="/Resources/images/london.jpg" alt="London">
-        <h3>London</h3>
-        <p>Vibrant capital with rich history and nightlife.</p>
-        <div class="rating">★★★★☆</div>
-      </div>
 
-      <div class="destination-card">
-        <img src="/Resources/images/edinburgh.jpg" alt="Edinburgh">
-        <h3>Edinburgh</h3>
-        <p>Charming old town, castles, and festivals.</p>
-        <div class="rating">★★★★★</div>
-      </div>
+        <div class="destination-card">
+            <img src="/Resources/images/oslo.jpg" alt="Oslo">
+            <h3>Oslo</h3>
+            <p>Scenic Nordic charm with stunning fjord views.</p>
+            <div class="rating">★★★★☆</div>
+        </div>
 
-      <div class="destination-card">
-        <img src="/Resources/images/paris.jpg" alt="Paris">
-        <h3>Paris</h3>
-        <p>Romantic streets, world-class art, and cuisine.</p>
-        <div class="rating">★★★★★</div>
-      </div>
+        <div class="destination-card">
+            <img src="/Resources/images/edinburgh.jpg" alt="Edinburgh">
+            <h3>Edinburgh</h3>
+            <p>Charming old town, castles, and festivals.</p>
+            <div class="rating">★★★★★</div>
+        </div>
 
-      <div class="destination-card">
-        <img src="/Resources/images/barcelona.jpg" alt="Barcelona">
-        <h3>Barcelona</h3>
-        <p>Gaudí’s architecture meets sunny beaches.</p>
-        <div class="rating">★★★★☆</div>
-      </div>
+        <div class="destination-card">
+            <img src="/Resources/images/paris.jpg" alt="Paris">
+            <h3>Paris</h3>
+            <p>Romantic streets, world-class art, and cuisine.</p>
+            <div class="rating">★★★★★</div>
+        </div>
 
-      <div class="destination-card">
-        <img src="/Resources/images/rome.jpg" alt="Rome">
-        <h3>Rome</h3>
-        <p>Ancient ruins, culture, and authentic pasta.</p>
-        <div class="rating">★★★★★</div>
-      </div>
+        <div class="destination-card">
+            <img src="/Resources/images/barcelona.jpg" alt="Barcelona">
+            <h3>Barcelona</h3>
+            <p>Gaudí’s architecture meets sunny beaches.</p>
+            <div class="rating">★★★★☆</div>
+        </div>
 
-      <div class="destination-card">
-        <img src="/Resources/images/tokyo.jpg" alt="Tokyo">
-        <h3>Tokyo</h3>
-        <p>Where modern life meets deep tradition.</p>
-        <div class="rating">★★★★★</div>
-      </div>
+        <div class="destination-card">
+            <img src="/Resources/images/rome.jpg" alt="Rome">
+            <h3>Rome</h3>
+            <p>Ancient ruins, culture, and authentic pasta.</p>
+            <div class="rating">★★★★★</div>
+        </div>
 
-      <div class="destination-card">
-        <img src="/Resources/images/newyork.jpg" alt="New York">
-        <h3>New York</h3>
-        <p>The city that never sleeps. Endless experiences.</p>
-        <div class="rating">★★★★☆</div>
-      </div>
+        <div class="destination-card">
+            <img src="/Resources/images/tokyo.jpg" alt="Tokyo">
+            <h3>Tokyo</h3>
+            <p>Where modern life meets deep tradition.</p>
+            <div class="rating">★★★★★</div>
+        </div>
 
-      <div class="destination-card">
-        <img src="/Resources/images/sydney.jpg" alt="Sydney">
-        <h3>Sydney</h3>
-        <p>Iconic beaches and the world-famous Opera House.</p>
-        <div class="rating">★★★★★</div>
-      </div>
+        <div class="destination-card">
+            <img src="/Resources/images/newyork.jpg" alt="New York">
+            <h3>New York</h3>
+            <p>The city that never sleeps. Endless experiences.</p>
+            <div class="rating">★★★★☆</div>
+        </div>
+
+        <div class="destination-card">
+            <img src="/Resources/images/syndey.jpg" alt="Sydney">
+            <h3>Sydney</h3>
+            <p>Iconic beaches and the world-famous Opera House.</p>
+            <div class="rating">★★★★★</div>
+        </div>
+
     </div>
-  </section>
+</section>
 
-  <!-- Footer -->
-  <footer>
+<!-- Footer -->
+<footer>
     <div class="footer-section">
-      <h3>COMPANY</h3>
-      <ul>
-        <li><a href="#">About us</a></li>
-        <li><a href="#">Careers</a></li>
-        <li><a href="#">Terms</a></li>
-        <li><a href="#">Privacy</a></li>
-      </ul>
+        <h3>COMPANY</h3>
+        <ul>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Terms</a></li>
+            <li><a href="#">Privacy</a></li>
+        </ul>
     </div>
     <div class="footer-section">
-      <h3>WORK WITH US</h3>
-      <ul>
-        <li><a href="#">Partners</a></li>
-        <li><a href="#">Advertise</a></li>
-        <li><a href="#">API</a></li>
-      </ul>
+        <h3>WORK WITH US</h3>
+        <ul>
+            <li><a href="#">Partners</a></li>
+            <li><a href="#">Advertise</a></li>
+            <li><a href="#">API</a></li>
+        </ul>
     </div>
     <div class="footer-section social-icons">
-      <h3>CONNECT</h3>
-      <a href="#">🔵</a>
-      <a href="#">🐦</a>
-      <a href="#">📷</a>
-      <a href="#">🔗</a>
+        <h3>CONNECT</h3>
+        <a href="#">🔵</a>
+        <a href="#">🐦</a>
+        <a href="#">📷</a>
+        <a href="#">🔗</a>
     </div>
     <div class="footer-section app-links">
-      <img src="/Resources/images/appleandgoogleplay.png" alt="App Download Links">
-      <p>&copy; 2025 bookingdotcom, Inc.</p>
+        <img src="/Resources/images/appleandgoogleplay.png" alt="App Download Links">
+        <p>&copy; 2025 bookingdotcom, Inc.</p>
     </div>
-  </footer>
+</footer>
 
 </body>
 </html>
