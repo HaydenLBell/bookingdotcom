@@ -269,28 +269,6 @@ document.getElementById("admin-add-room")?.addEventListener("click", async () =>
     }
 });
 
-// ----------------------------
-// TAB SWITCHING
-// ----------------------------
-document.querySelectorAll(".tab-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const target = btn.dataset.tab;
-
-        // Remove active state from all buttons
-        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-
-        // Add active state to clicked button
-        btn.classList.add("active");
-
-        // Hide all tab contents
-        document.querySelectorAll(".tab-content").forEach(tab => {
-            tab.classList.remove("visible");
-        });
-
-        // Show selected tab only
-        document.getElementById(target).classList.add("visible");
-    });
-});
 
 
 });
