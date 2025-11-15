@@ -250,171 +250,222 @@ button:hover, .btn:hover{background:var(--accent-2)}
 }
 
 /* ===========================
-   ACCOUNT PAGE — PANEL DESIGN
+   ACCOUNT PAGE REFINEMENT
    =========================== */
 
 /* Page wrapper */
-#account-info {
-  padding: 50px 10%;
+.account-wrap {
+  padding: 40px 8%;
   display: flex;
   flex-direction: column;
   gap: 32px;
-  align-items: center;
+  background: var(--bg);
+  min-height: 100vh;
 }
 
-/* SECTION PANEL (big card) */
-.account-panel {
-  background: var(--panel);
-  padding: 32px;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 900px;
-  box-shadow: var(--shadow);
+.account-header {
   display: flex;
-  flex-direction: column;
-  gap: 24px;
-  text-align: left;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-.account-panel h2 {
-  font-size: 1.9rem;
+.account-title {
+  font-size: 2rem;
   font-weight: 700;
   color: var(--text);
-  margin-bottom: 6px;
 }
 
-/* ===========================
-   INDIVIDUAL DETAIL CARDS
-   =========================== */
-
-.account-details {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
-}
-
-.account-item {
-  background: var(--card);
-  padding: 18px 20px;
-  border-radius: 14px;
-  box-shadow: var(--shadow);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  transition: transform .2s, background .2s;
-}
-
-.account-item:hover {
-  transform: translateY(-5px);
-  background: var(--accent);
-}
-
-.account-item label {
-  font-weight: 700;
-  color: var(--text);
+.muted {
+  color: var(--muted);
   font-size: 0.95rem;
 }
 
-.account-item span {
-  color: var(--bg-dark);
-  font-size: 1.05rem;
-  font-weight: 600;
+/* Tabs */
+.tabs-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
 }
 
-/* ===========================
-   BOOKINGS — EACH BOOKING IS A CARD
-   =========================== */
+.tab-btn {
+  background: var(--card);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--text);
+}
 
-#bookings {
-  padding: 40px 10%;
+.tab-btn.active {
+  background: var(--accent);
+  color: var(--bg-dark);
+}
+
+/* Main content grid */
+.content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+}
+
+.left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.right-col {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  align-items: center;
 }
 
-.booking-list {
+/* Panels */
+.panel {
+  background: var(--panel);
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s, background 0.2s;
+}
+
+.panel:hover {
+  transform: translateY(-3px);
+}
+
+/* Info rows */
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+/* Account details grid */
+#tab-details .info-row {
+  font-size: 0.95rem;
+}
+
+/* Bookings grid */
+#booking-list {
   display: grid;
-  gap: 22px;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  width: 100%;
-  max-width: 1100px;
+  gap: 20px;
 }
 
 .booking-card {
   background: var(--card);
+  padding: 18px;
   border-radius: 16px;
-  padding: 22px;
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  transition: transform .2s, background .2s;
+  gap: 10px;
+  transition: transform 0.2s;
 }
 
 .booking-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   background: var(--accent);
 }
 
-.booking-card h3 {
-  font-size: 1.3rem;
-  font-weight: 700;
+/* Security inputs */
+.input-block {
+  margin-bottom: 14px;
+}
+
+.input-block input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--card);
   color: var(--text);
 }
 
-.booking-meta {
-  color: var(--bg-dark);
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.booking-actions {
-  margin-top: 8px;
+.btn-row {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
-.btn-small {
+/* Admin section */
+#tab-admin input {
+  width: calc(100% - 16px);
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: var(--card);
+  color: var(--text);
+}
+
+#tab-admin button {
+  width: fit-content;
+}
+
+/* Profile sidebar */
+.profile-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
   background: var(--accent);
-  color: var(--bg-dark);
-  padding: 10px 18px;
-  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
   font-weight: 700;
-  border: none;
-  cursor: pointer;
-  transition: background .15s;
+  color: var(--bg-dark);
+  margin-bottom: 12px;
 }
 
-.btn-small:hover {
+.right-col .info-row {
+  font-size: 0.95rem;
+}
+
+.btn-full, .view-rooms-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  border-radius: 12px;
+  font-weight: 600;
+  color: var(--bg-dark);
+  background: var(--accent);
+  margin-top: 8px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.btn-full:hover, .view-rooms-btn:hover {
   background: var(--accent-2);
 }
 
-/* ===========================
-   RESPONSIVE
-   =========================== */
-
-@media(max-width: 700px) {
-  .account-panel {
-    padding: 24px;
+/* Responsive */
+@media (max-width: 1000px) {
+  .content-grid {
+    grid-template-columns: 1fr;
   }
-  .account-item {
-    padding: 16px;
+
+  .right-col {
+    order: -1;
   }
 }
 
-.tab-content {
-    display: none;
-}
-
-.tab-content.visible {
-    display: block;
-
-
-
+@media (max-width: 700px) {
+  .tab-btn {
+    flex: 1 1 48%;
   }
 
-  #admin-tab-btn {
-    display: none;
+  .panel {
+    padding: 18px;
+  }
 }
-
