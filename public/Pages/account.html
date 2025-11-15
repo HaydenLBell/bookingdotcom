@@ -5,26 +5,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Account | Booklydotcom</title>
 
-  <!-- Use your main site stylesheet -->
   <link rel="stylesheet" href="../CSS/styles.css">
-
-  <!-- Small page-specific tweaks that follow your palette -->
-  
 </head>
+
 <body>
 
-  <!-- Use your site's nav to keep consistent header -->
+<!-- ---------------- NAV BAR SCRIPT ---------------- -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const navLinks = document.getElementById('nav-links');
     const storedUser = JSON.parse(localStorage.getItem('user'));
 
     if (storedUser) {
-        // Remove login/signup link
         const loginItem = [...navLinks.children].find(li => li.textContent.includes('Log-in'));
         if (loginItem) navLinks.removeChild(loginItem);
 
-        // Add account + logout
         const accountItem = document.createElement('li');
         accountItem.innerHTML = `<a href="/Pages/account.html">Account (${storedUser.fname || storedUser.email})</a>`;
         navLinks.appendChild(accountItem);
@@ -33,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
         navLinks.appendChild(logoutItem);
 
-        // Handle logout click
         document.getElementById('logout-link').addEventListener('click', (e) => {
             e.preventDefault();
             localStorage.removeItem('user');
@@ -43,260 +37,187 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<!-- ---------------- NAVIGATION BAR ---------------- -->
+<nav>
+    <h1><a href="index.html">Bookly</a>dotcom</h1>
 
-<body>
+    <div class="airbnb-search">
+        <div class="search-section">
+            <label for="where">Where</label>
+            <input type="text" id="where" placeholder="Search destinations">
+        </div>
 
-    <!-- Navigation Bar -->
-    <nav>
-        <h1><a href="index.html">Bookly</a>dotcom</h1>
+        <div class="search-section">
+            <label for="checkin">Check in</label>
+            <input type="date" id="checkin">
+        </div>
 
-        <div class="airbnb-search">
-            <div class="search-section">
-                <label for="where">Where</label>
-                <input type="text" id="where" placeholder="Search destinations">
-            </div>
-
-            <div class="search-section">
-                <label for="checkin">Check in</label>
-                <input type="date" id="checkin">
-            </div>
-
-            <div class="search-section" id="guestsSection">
-                <label for="guests">Who</label>
-                <input type="text" id="guests" placeholder="Add guests" readonly>
-                <div class="guests-dropdown" id="guestsDropdown">
-                    <div class="guest-row">
-                        <span>Adults</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="adults">0</span>
-                            <button class="increase">+</button>
-                        </div>
+        <div class="search-section" id="guestsSection">
+            <label for="guests">Who</label>
+            <input type="text" id="guests" placeholder="Add guests" readonly>
+            <div class="guests-dropdown" id="guestsDropdown">
+                <div class="guest-row">
+                    <span>Adults</span>
+                    <div class="guest-controls">
+                        <button class="decrease">-</button>
+                        <span class="count" data-type="adults">0</span>
+                        <button class="increase">+</button>
                     </div>
-                    <div class="guest-row">
-                        <span>Children</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="children">0</span>
-                            <button class="increase">+</button>
-                        </div>
+                </div>
+
+                <div class="guest-row">
+                    <span>Children</span>
+                    <div class="guest-controls">
+                        <button class="decrease">-</button>
+                        <span class="count" data-type="children">0</span>
+                        <button class="increase">+</button>
                     </div>
-                    <div class="guest-row">
-                        <span>Infants</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="infants">0</span>
-                            <button class="increase">+</button>
-                        </div>
+                </div>
+
+                <div class="guest-row">
+                    <span>Infants</span>
+                    <div class="guest-controls">
+                        <button class="decrease">-</button>
+                        <span class="count" data-type="infants">0</span>
+                        <button class="increase">+</button>
                     </div>
-                    <div class="guest-row">
-                        <span>Pets</span>
-                        <div class="guest-controls">
-                            <button class="decrease">-</button>
-                            <span class="count" data-type="pets">0</span>
-                            <button class="increase">+</button>
-                        </div>
+                </div>
+
+                <div class="guest-row">
+                    <span>Pets</span>
+                    <div class="guest-controls">
+                        <button class="decrease">-</button>
+                        <span class="count" data-type="pets">0</span>
+                        <button class="increase">+</button>
                     </div>
                 </div>
             </div>
-
-            <button class="search-btn"><a href="/Pages/listings.html">🔍</a></button>
         </div>
 
-        <button id="menu-toggle">☰</button>
-        <ul id="nav-links">
-            <li><a href="/Pages/index.html">Home</a></li>
-            <li><a href="/Pages/destinations.html">All Destinations</a></li>
-            <li><a href="/Pages/listings.html">Browse Hotels</a></li>
-            <li><a href="/Pages/login.html">Log-in / Sign-Up</a></li>
-        </ul>
-    </nav>
+        <button class="search-btn"><a href="/Pages/listings.html">🔍</a></button>
+    </div>
 
-  <main class="account-wrap">
+    <button id="menu-toggle">☰</button>
+    <ul id="nav-links">
+        <li><a href="/Pages/index.html">Home</a></li>
+        <li><a href="/Pages/destinations.html">All Destinations</a></li>
+        <li><a href="/Pages/listings.html">Browse Hotels</a></li>
+        <li><a href="/Pages/login.html">Log-in / Sign-Up</a></li>
+    </ul>
+</nav>
 
-    <!-- Top: heading + tabs -->
-    <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
-      <div>
-        <h1 style="margin:0 0 4px 0;">My Account</h1>
-        <div class="muted">Manage your profile, bookings and security</div>
-      </div>
+<!-- ---------------- MAIN CONTENT ---------------- -->
+<main class="account-wrap">
 
-  <div class="tabs-row" role="tablist" aria-label="Account tabs">
-      <button class="tab-btn active" data-tab="tab-details">Account Details</button>
-      <button class="tab-btn" data-tab="tab-bookings">My Bookings</button>
-      <button class="tab-btn" data-tab="tab-security">Security</button>
+    <header class="account-header">
+        <div>
+            <h1 class="account-title">My Account</h1>
+            <div class="muted">Manage your profile, bookings and security</div>
+        </div>
 
-      <!-- Hidden by default, shown only for admins -->
-      <button class="tab-btn" id="admin-tab-btn" data-tab="tab-admin" style="display:none;">
-        Admin
-      </button>
-  </div>
+        <div class="tabs-row" role="tablist" aria-label="Account tabs">
+            <button class="tab-btn active" data-tab="tab-details">Account Details</button>
+            <button class="tab-btn" data-tab="tab-bookings">My Bookings</button>
+            <button class="tab-btn" data-tab="tab-security">Security</button>
+            <button class="tab-btn" id="admin-tab-btn" data-tab="tab-admin">Admin</button>
+        </div>
+    </header>
 
-
-    <!-- Two-column content: left = main, right = summary -->
     <div class="content-grid">
 
-      <!-- LEFT COLUMN -->
-      <section class="left-col">
+        <!-- LEFT COLUMN -->
+        <section class="left-col">
 
-        <!-- ACCOUNT DETAILS (tab content) -->
-        <div id="tab-details" class="panel tab-content" style="display:block;">
-          <h2>Account Information</h2>
+            <!-- Account Details Tab -->
+            <div id="tab-details" class="panel tab-content visible">
+                <h2>Account Information</h2>
 
-          <div class="info-row">
-            <div><strong>First name</strong></div>
-            <div id="acc-fname">—</div>
-          </div>
-
-          <div class="info-row">
-            <div><strong>Last name</strong></div>
-            <div id="acc-lname">—</div>
-          </div>
-
-          <div class="info-row">
-            <div><strong>Email</strong></div>
-            <div id="acc-email">—</div>
-          </div>
-
-          <div class="info-row">
-            <div><strong>Account type</strong></div>
-            <div id="acc-type">—</div>
-          </div>
-        </div>
-
-        <!-- BOOKINGS tab -->
-        <div id="tab-bookings" class="panel tab-content" style="display:none;">
-          <h2>My Bookings</h2>
-          <div id="booking-list">
-            <!-- booking cards will be injected by account.js -->
-            <div class="muted">Loading bookings…</div>
-          </div>
-        </div>
-
-        <!-- SECURITY tab -->
-        <div id="tab-security" class="panel tab-content" style="display:none;">
-          <h2>Security</h2>
-
-          <div style="margin-bottom:12px;">
-            <label for="currentPassword" style="display:block;margin-bottom:6px;color:#DADADA;">Current password</label>
-            <input id="currentPassword" type="password" placeholder="Current password" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
-          </div>
-
-          <div style="margin-bottom:12px;">
-            <label for="newPassword" style="display:block;margin-bottom:6px;color:#DADADA;">New password</label>
-            <input id="newPassword" type="password" placeholder="New password" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
-          </div>
-
-          <div style="display:flex;gap:10px;">
-            <button id="btn-change-password" class="btn-small btn-edit">Change password</button>
-            <button id="btn-delete-account" class="btn-small btn-cancel">Delete account</button>
-          </div>
-
-          <div id="security-msg" style="margin-top:12px;color:#DADADA;"></div>
-        </div>
-
-        <!-- ADMIN TAB (hidden unless admin) -->
-<div id="tab-admin" class="panel tab-content" style="display:none;">
-  <h2>Admin Control Panel</h2>
-
-  <h3 style="margin-top: 12px;">Add a Hotel</h3>
-  <div class="info-row">
-      <input id="admin-hotel-name" type="text" placeholder="Hotel name" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
-  </div>
-
-  <div class="info-row">
-      <input id="admin-hotel-address" type="text" placeholder="Address" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
-  </div>
-
-  <button id="admin-add-hotel" class="btn-small btn-edit">Add Hotel</button>
-
-
-  <h3 style="margin-top: 28px;">Add Room Type to a Hotel</h3>
-
-  <div class="info-row">
-      <input id="admin-room-hotel-id" type="number" placeholder="Hotel ID" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
-  </div>
-
-  <div class="info-row">
-      <input id="admin-room-type" type="text" placeholder="Room Type (e.g. Standard, Deluxe)" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
-  </div>
-
-  <div class="info-row">
-      <input id="admin-room-quantity" type="number" placeholder="Number of Rooms" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
-  </div>
-
-  <button id="admin-add-room" class="btn-small btn-edit">Add Room Type</button>
-
-  <div id="admin-msg" class="muted" style="margin-top:12px;"></div>
-</div>
-
-
-      </section>
-
-      <!-- RIGHT COLUMN (summary / quick actions) -->
-      <aside class="right-col">
-        <div class="panel">
-          <h2>Profile</h2>
-
-          <div style="text-align:center; margin-bottom:12px;">
-            <div style="width:72px;height:72px;border-radius:50%;background:#BCB77B;display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:#161616;font-size:22px;">
-              <span id="acc-initial">H</span>
+                <div class="info-row"><strong>First name</strong><div id="acc-fname">—</div></div>
+                <div class="info-row"><strong>Last name</strong><div id="acc-lname">—</div></div>
+                <div class="info-row"><strong>Email</strong><div id="acc-email">—</div></div>
+                <div class="info-row"><strong>Account type</strong><div id="acc-type">—</div></div>
             </div>
-          </div>
 
-          <div class="info-row">
-            <div><strong>Name</strong></div>
-            <div id="acc-name">—</div>
-          </div>
+            <!-- Bookings Tab -->
+            <div id="tab-bookings" class="panel tab-content">
+                <h2>My Bookings</h2>
+                <div id="booking-list"><div class="muted">Loading bookings…</div></div>
+            </div>
 
-          <div class="info-row">
-            <div><strong>Email</strong></div>
-            <div id="acc-email-2">—</div>
-          </div>
+            <!-- Security Tab -->
+            <div id="tab-security" class="panel tab-content">
+                <h2>Security</h2>
 
-          <div style="margin-top:16px;text-align:center;">
-            <button id="btn-logout" class="view-rooms-btn" style="width:100%;">Logout</button>
-          </div>
-        </div>
+                <div class="input-block">
+                    <label for="currentPassword" class="muted">Current password</label>
+                    <input id="currentPassword" type="password" placeholder="Current password" class="input-dark">
+                </div>
 
-        <div class="panel" style="margin-top:14px;">
-          <h2>Quick actions</h2>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <a href="/Pages/listings.html" class="view-rooms-btn" style="text-align:center;">Browse hotels</a>
-            <a href="/Pages/index.html" class="view-rooms-btn" style="text-align:center;">Return home</a>
-          </div>
-        </div>
-      </aside>
+                <div class="input-block">
+                    <label for="newPassword" class="muted">New password</label>
+                    <input id="newPassword" type="password" placeholder="New password" class="input-dark">
+                </div>
+
+                <div class="btn-row">
+                    <button id="btn-change-password" class="btn-small btn-edit">Change password</button>
+                    <button id="btn-delete-account" class="btn-small btn-cancel">Delete account</button>
+                </div>
+
+                <div id="security-msg" class="security-message"></div>
+            </div>
+
+            <!-- Admin Tab -->
+            <div id="tab-admin" class="panel tab-content">
+                <h2>Admin Control Panel</h2>
+
+                <h3>Add a Hotel</h3>
+                <input id="admin-hotel-name" class="input-dark" placeholder="Hotel name">
+                <input id="admin-hotel-address" class="input-dark" placeholder="Address">
+                <button id="admin-add-hotel" class="btn-small btn-edit">Add Hotel</button>
+
+                <h3 class="admin-spacing">Add Room Type to a Hotel</h3>
+                <input id="admin-room-hotel-id" class="input-dark" placeholder="Hotel ID" type="number">
+                <input id="admin-room-type" class="input-dark" placeholder="Room Type">
+                <input id="admin-room-quantity" class="input-dark" placeholder="Number of Rooms" type="number">
+
+                <button id="admin-add-room" class="btn-small btn-edit">Add Room Type</button>
+
+                <div id="admin-msg" class="muted admin-message"></div>
+            </div>
+
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="right-col">
+            <div class="panel">
+                <h2>Profile</h2>
+
+                <div class="profile-photo">
+                    <div class="profile-circle">
+                        <span id="acc-initial">H</span>
+                    </div>
+                </div>
+
+                <div class="info-row"><strong>Name</strong><div id="acc-name">—</div></div>
+                <div class="info-row"><strong>Email</strong><div id="acc-email-2">—</div></div>
+
+                <div class="btn-full">
+                    <button id="btn-logout" class="view-rooms-btn">Logout</button>
+                </div>
+            </div>
+
+            <div class="panel quick-actions">
+                <h2>Quick actions</h2>
+                <a href="/Pages/listings.html" class="view-rooms-btn">Browse hotels</a>
+                <a href="/Pages/index.html" class="view-rooms-btn">Return home</a>
+            </div>
+        </aside>
     </div>
-  </main>
+</main>
 
-  <!-- your account JS (rewritten earlier / to be added) -->
-  <script src="/JS/account.js"></script>
+<script src="../JS/account.js"></script>
 
-  <!-- Small inline tab switching to ensure UI works even before JS loads -->
-  <script>
-    (function () {
-      const tabs = document.querySelectorAll('.tab-btn');
-      const contents = document.querySelectorAll('.tab-content');
 
-      function showTab(tabName) {
-        contents.forEach(c => c.style.display = 'none');
-        tabs.forEach(t => t.classList.remove('active'));
-        const target = document.getElementById(tabName);
-        if (target) target.style.display = 'block';
-        const btn = Array.from(tabs).find(b => b.dataset.tab === tabName);
-        if (btn) btn.classList.add('active');
-      }
 
-      tabs.forEach(btn => {
-        btn.addEventListener('click', () => {
-          showTab(btn.dataset.tab);
-        });
-      });
-
-      // expose for account.js if needed
-      window.showAccountTab = showTab;
-    })();
-  </script>
 </body>
 </html>

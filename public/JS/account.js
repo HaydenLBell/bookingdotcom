@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", () => {
+
 // ----------------------------
 // Load user from localStorage
 // ----------------------------
@@ -125,6 +127,7 @@ function attachBookingButtons() {
 // ----------------------------
 // CHANGE PASSWORD
 // ----------------------------
+
 document.getElementById("btn-change-password").addEventListener("click", async () => {
     const current = document.getElementById("currentPassword").value.trim();
     const newPw = document.getElementById("newPassword").value.trim();
@@ -136,16 +139,16 @@ document.getElementById("btn-change-password").addEventListener("click", async (
     }
 
     try {
-        const res = await fetch(`/api/user/${user.id}/password`, {
-            method: "POST",
+        const res = await fetch(`/api/user/change-password`, {
+            method: "PUT",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ currentPassword: current, newPassword: newPw })
+            body: JSON.stringify({ userID: user.id, oldPassword: current, newPassword: newPw })
         });
 
         const data = await res.json();
 
         msg.textContent = data.success
-            ? "Password changed successfully!"
+            ? data.message
             : (data.error || "Failed to update password.");
 
         if (data.success) {
@@ -157,6 +160,8 @@ document.getElementById("btn-change-password").addEventListener("click", async (
         msg.textContent = "Error connecting to server.";
     }
 });
+
+
 
 // ----------------------------
 // DELETE ACCOUNT
@@ -182,33 +187,38 @@ document.getElementById("btn-delete-account").addEventListener("click", async ()
     }
 });
 
+
 // ----------------------------
 // ADMIN: ADD HOTEL
 // ----------------------------
 document.getElementById("admin-add-hotel")?.addEventListener("click", async () => {
-    const name = document.getElementById("admin-hotel-name").value.trim();
+    const hotelName = document.getElementById("admin-hotel-name").value.trim();
     const address = document.getElementById("admin-hotel-address").value.trim();
     const msg = document.getElementById("admin-msg");
 
-    if (!name || !address) {
+    if (!hotelName || !address) {
         msg.textContent = "Hotel name and address are required.";
         return;
     }
 
     try {
-        const res = await fetch("/api/admin/hotels", {
+        const res = await fetch("/api/admin/hotel", {  // singular, matches server
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ name, address })
+            body: JSON.stringify({ 
+                userID: user.id,       // include current user's ID for admin check
+                hotelName, 
+                address 
+            })
         });
 
         const data = await res.json();
 
-        msg.textContent = data.success 
-            ? "Hotel successfully added!" 
+        msg.textContent = data.hotelID
+            ? "Hotel successfully added!"
             : (data.error || "Failed to add hotel.");
 
-        if (data.success) {
+        if (data.hotelID) {
             document.getElementById("admin-hotel-name").value = "";
             document.getElementById("admin-hotel-address").value = "";
         }
@@ -218,6 +228,7 @@ document.getElementById("admin-add-hotel")?.addEventListener("click", async () =
         console.error(err);
     }
 });
+
 
 // ----------------------------
 // ADMIN: ADD ROOM TYPE
@@ -258,3 +269,28 @@ document.getElementById("admin-add-room")?.addEventListener("click", async () =>
     }
 });
 
+// ----------------------------
+// TAB SWITCHING
+// ----------------------------
+document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const target = btn.dataset.tab;
+
+        // Remove active state from all buttons
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+
+        // Add active state to clicked button
+        btn.classList.add("active");
+
+        // Hide all tab contents
+        document.querySelectorAll(".tab-content").forEach(tab => {
+            tab.classList.remove("visible");
+        });
+
+        // Show selected tab only
+        document.getElementById(target).classList.add("visible");
+    });
+});
+
+
+});

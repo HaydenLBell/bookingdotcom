@@ -248,3 +248,173 @@ button:hover, .btn:hover{background:var(--accent-2)}
   .room-card img{height:140px}
   .destination-card img{height:120px}
 }
+
+/* ===========================
+   ACCOUNT PAGE — PANEL DESIGN
+   =========================== */
+
+/* Page wrapper */
+#account-info {
+  padding: 50px 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+}
+
+/* SECTION PANEL (big card) */
+.account-panel {
+  background: var(--panel);
+  padding: 32px;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: left;
+}
+
+.account-panel h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+/* ===========================
+   INDIVIDUAL DETAIL CARDS
+   =========================== */
+
+.account-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.account-item {
+  background: var(--card);
+  padding: 18px 20px;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform .2s, background .2s;
+}
+
+.account-item:hover {
+  transform: translateY(-5px);
+  background: var(--accent);
+}
+
+.account-item label {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.account-item span {
+  color: var(--bg-dark);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* ===========================
+   BOOKINGS — EACH BOOKING IS A CARD
+   =========================== */
+
+#bookings {
+  padding: 40px 10%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.booking-list {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  width: 100%;
+  max-width: 1100px;
+}
+
+.booking-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: transform .2s, background .2s;
+}
+
+.booking-card:hover {
+  transform: translateY(-6px);
+  background: var(--accent);
+}
+
+.booking-card h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.booking-meta {
+  color: var(--bg-dark);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.booking-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn-small {
+  background: var(--accent);
+  color: var(--bg-dark);
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-small:hover {
+  background: var(--accent-2);
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+
+@media(max-width: 700px) {
+  .account-panel {
+    padding: 24px;
+  }
+  .account-item {
+    padding: 16px;
+  }
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.visible {
+    display: block;
+
+
+
+  }
+
+  #admin-tab-btn {
+    display: none;
+}
+

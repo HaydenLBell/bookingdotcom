@@ -32,8 +32,8 @@ const db = mysql.createConnection({
 });
 
 db.connect(err => {
-  if (err) return console.error('❌ MySQL Error:', err);
-  console.log('✅ MySQL Connected');
+  if (err) return console.error('MySQL Error:', err);
+  console.log('MySQL Connected');
 });
 
 // -----------------------------
@@ -395,47 +395,53 @@ app.delete('/api/bookings/:bookingID', (req, res) => {
 // ------------------------------------------------
 app.put('/api/user/change-password', (req, res) => {
   const { userID, oldPassword, newPassword } = req.body;
-  if (!userID || !oldPassword || !newPassword) return res.status(400).json({ error: 'Missing fields' });
+  if (!userID || !oldPassword || !newPassword)
+    return res.status(400).json({ success: false, error: 'Missing fields' });
 
   db.query('SELECT psswrd FROM Users WHERE userID = ?', [userID], (err, rows) => {
-    if (err) return res.status(500).json({ error: 'DB error' });
-    if (rows.length === 0) return res.status(404).json({ error: 'User not found' });
-    if (rows[0].psswrd !== oldPassword) return res.status(400).json({ error: 'Current password incorrect' });
+    if (err) return res.status(500).json({ success: false, error: 'DB error' });
+    if (rows.length === 0) return res.status(404).json({ success: false, error: 'User not found' });
+    if (rows[0].psswrd !== oldPassword)
+      return res.status(400).json({ success: false, error: 'Current password incorrect' });
 
     db.query('UPDATE Users SET psswrd = ? WHERE userID = ?', [newPassword, userID], (err) => {
-      if (err) return res.status(500).json({ error: 'DB error' });
-      res.json({ message: 'Password changed' });
+      if (err) return res.status(500).json({ success: false, error: 'DB error' });
+      res.json({ success: true, message: 'Password changed successfully' });
     });
   });
 });
 
 app.delete('/api/user/:id', (req, res) => {
   const userID = req.params.id;
+
   db.query('SELECT bookingID FROM Bookings WHERE userID = ?', [userID], (err, bookings) => {
-    if (err) return res.status(500).json({ error: 'DB error' });
+    if (err) return res.status(500).json({ success: false, error: 'DB error' });
     const bookingIDs = bookings.map(b => b.bookingID);
+
+    const deleteUser = () => {
+      db.query('DELETE FROM Users WHERE userID = ?', [userID], (err) => {
+        if (err) return res.status(500).json({ success: false, error: 'DB error' });
+        res.json({ success: true, message: 'User deleted successfully' });
+      });
+    };
+
     if (bookingIDs.length > 0) {
       db.query('DELETE FROM BookedRooms WHERE bookingID IN (?)', [bookingIDs], (err) => {
         if (err) console.error(err);
         db.query('DELETE FROM Bookings WHERE bookingID IN (?)', [bookingIDs], (err) => {
           if (err) console.error(err);
-          db.query('DELETE FROM Users WHERE userID = ?', [userID], (err) => {
-            if (err) return res.status(500).json({ error: 'DB error' });
-            res.json({ message: 'User deleted' });
-          });
+          deleteUser();
         });
       });
     } else {
-      db.query('DELETE FROM Users WHERE userID = ?', [userID], (err) => {
-        if (err) return res.status(500).json({ error: 'DB error' });
-        res.json({ message: 'User deleted' });
-      });
+      deleteUser();
     }
   });
 });
 
+
 // ------------------------------------------------
-//  ADMIN ROUTES (Option A: each route requires userID in body)
+//  ADMIN STUFF
 // ------------------------------------------------
 
 // Admin: create a hotel
@@ -758,4 +764,4 @@ app.post("/api/admin/rooms", async (req, res) => {
 // ------------------------------------------------
 //  START SERVER
 // ------------------------------------------------
-app.listen(3000, () => console.log("✅ Server running on 3000"));
+app.listen(3000, () => console.log("Server running on port 3000"));
