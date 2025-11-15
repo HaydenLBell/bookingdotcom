@@ -469,3 +469,11 @@ button:hover, .btn:hover{background:var(--accent-2)}
     padding: 18px;
   }
 }
+
+.filter-bar select{
+  background-color: var(--accent);
+  width: 250px; 
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 25px;
+}
