@@ -6,116 +6,10 @@
   <title>Account | Booklydotcom</title>
 
   <!-- Use your main site stylesheet -->
-  <link rel="stylesheet" href="/CSS/styles.css">
+  <link rel="stylesheet" href="../CSS/styles.css">
 
   <!-- Small page-specific tweaks that follow your palette -->
-  <style>
-    /* Container placement */
-    .account-wrap {
-      max-width: 960px;
-      margin: 48px auto;
-      padding: 20px;
-    }
-
-    /* Tabs bar */
-    .tabs-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: none;
-      padding: 10px 14px;
-      cursor: pointer;
-      color: #F0EEED;
-      font-weight: 600;
-      border-radius: 8px;
-      transition: background 0.18s ease, color 0.18s ease;
-    }
-
-    .tab-btn.active {
-      background: #BCB77B; /* site accent */
-      color: #161616;
-      box-shadow: 0 6px 14px rgba(0,0,0,0.25);
-    }
-
-    .content-grid {
-      display: grid;
-      grid-template-columns: 1fr 360px;
-      gap: 20px;
-      align-items: start;
-    }
-
-    /* On small screens, single column */
-    @media (max-width: 900px) {
-      .content-grid { grid-template-columns: 1fr; }
-      .right-col { order: -1; } /* move account summary on top for mobile */
-    }
-
-    /* a card-like panel using your .card base */
-    .panel {
-      padding: 18px;
-      border-radius: 12px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.06));
-      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-      color: #F0EEED;
-    }
-
-    .info-row {
-      display:flex;
-      justify-content:space-between;
-      gap: 10px;
-      margin: 8px 0;
-      align-items:center;
-    }
-
-    .info-row strong { color: #BCB77B; }
-
-    /* bookings list */
-    .booking-card {
-      background: #383540;
-      padding: 12px;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      border: 1px solid rgba(255,255,255,0.03);
-    }
-
-    .booking-meta {
-      font-size: 0.95rem;
-      color: #DADADA;
-      margin-top: 8px;
-    }
-
-    .booking-actions {
-      display:flex;
-      gap:8px;
-      margin-top:10px;
-    }
-
-    .btn-small {
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .btn-edit { background: #BCB77B; color:#161616; }
-    .btn-cancel { background: #FF6B6B; color: white; }
-
-    /* subtle headings */
-    .panel h2 {
-      margin: 0 0 12px 0;
-      font-size: 1.2rem;
-      color: #FFFEFE;
-    }
-
-    .muted { color: #DADADA; font-size: 0.95rem; }
-  </style>
+  
 </head>
 <body>
 
@@ -227,12 +121,17 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="muted">Manage your profile, bookings and security</div>
       </div>
 
-      <div class="tabs-row" role="tablist" aria-label="Account tabs">
-        <button class="tab-btn active" data-tab="tab-details">Account Details</button>
-        <button class="tab-btn" data-tab="tab-bookings">My Bookings</button>
-        <button class="tab-btn" data-tab="tab-security">Security</button>
-      </div>
-    </header>
+  <div class="tabs-row" role="tablist" aria-label="Account tabs">
+      <button class="tab-btn active" data-tab="tab-details">Account Details</button>
+      <button class="tab-btn" data-tab="tab-bookings">My Bookings</button>
+      <button class="tab-btn" data-tab="tab-security">Security</button>
+
+      <!-- Hidden by default, shown only for admins -->
+      <button class="tab-btn" id="admin-tab-btn" data-tab="tab-admin" style="display:none;">
+        Admin
+      </button>
+  </div>
+
 
     <!-- Two-column content: left = main, right = summary -->
     <div class="content-grid">
@@ -295,6 +194,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
           <div id="security-msg" style="margin-top:12px;color:#DADADA;"></div>
         </div>
+
+        <!-- ADMIN TAB (hidden unless admin) -->
+<div id="tab-admin" class="panel tab-content" style="display:none;">
+  <h2>Admin Control Panel</h2>
+
+  <h3 style="margin-top: 12px;">Add a Hotel</h3>
+  <div class="info-row">
+      <input id="admin-hotel-name" type="text" placeholder="Hotel name" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
+  </div>
+
+  <div class="info-row">
+      <input id="admin-hotel-address" type="text" placeholder="Address" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
+  </div>
+
+  <button id="admin-add-hotel" class="btn-small btn-edit">Add Hotel</button>
+
+
+  <h3 style="margin-top: 28px;">Add Room Type to a Hotel</h3>
+
+  <div class="info-row">
+      <input id="admin-room-hotel-id" type="number" placeholder="Hotel ID" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
+  </div>
+
+  <div class="info-row">
+      <input id="admin-room-type" type="text" placeholder="Room Type (e.g. Standard, Deluxe)" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
+  </div>
+
+  <div class="info-row">
+      <input id="admin-room-quantity" type="number" placeholder="Number of Rooms" style="width:100%;padding:10px;border-radius:8px;border:none;background:#494456;color:#fff;">
+  </div>
+
+  <button id="admin-add-room" class="btn-small btn-edit">Add Room Type</button>
+
+  <div id="admin-msg" class="muted" style="margin-top:12px;"></div>
+</div>
+
 
       </section>
 

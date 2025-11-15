@@ -37,74 +37,64 @@ body {
 
 /* ====== ROOM CARD ====== */
 .room-card {
-    background: white;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: 0.25s;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden; /* ensure images don’t overflow corners */
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
 }
+
 
 .room-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    transform: translateY(-5px);
 }
 
-/* Room Images */
 .room-card img {
     width: 100%;
-    height: 170px;
-    object-fit: cover;
+    height: 180px;      /* fixed height for consistency */
+    object-fit: cover;  /* crop and fill nicely */
 }
 
-/* Text area */
 .room-info {
-    padding: 18px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .room-info h3 {
-    margin: 0 0 8px 0;
-    font-size: 20px;
-    font-weight: 600;
+    margin: 0;
+    font-size: 1.2rem;
 }
 
 .room-price {
-    color: #333;
-    font-weight: 600;
-    margin-bottom: 12px;
-    font-size: 16px;
-}
-
-.room-status {
-    margin-bottom: 15px;
-    font-size: 14px;
+    font-weight: bold;
+    color: #007bff;
 }
 
 .room-status.available {
     color: green;
+    font-weight: bold;
 }
 
 .room-status.unavailable {
     color: red;
+    font-weight: bold;
 }
 
-/* Button */
-.room-card button {
-    width: 100%;
-    padding: 12px;
-    background: #ff385c;
+.room-info button {
+    padding: 10px;
+    background: #007bff;
     border: none;
     color: white;
-    font-size: 15px;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: 0.2s;
+    margin-top: 10px;
 }
 
-.room-card button:hover {
-    background: #e12d4f;
-}
-
-.room-card button:disabled {
+.room-info button:disabled {
     background: #aaa;
     cursor: not-allowed;
 }

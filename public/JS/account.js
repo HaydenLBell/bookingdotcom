@@ -31,6 +31,10 @@ function fillAccountDetails() {
 
 fillAccountDetails();
 
+if (user.isAdmin){
+    document.getElementById("admin-tab-btn").style.display = "inline-block";
+}
+
 // ----------------------------
 // Logout
 // ----------------------------
@@ -177,3 +181,80 @@ document.getElementById("btn-delete-account").addEventListener("click", async ()
         msg.textContent = "Error communicating with server.";
     }
 });
+
+// ----------------------------
+// ADMIN: ADD HOTEL
+// ----------------------------
+document.getElementById("admin-add-hotel")?.addEventListener("click", async () => {
+    const name = document.getElementById("admin-hotel-name").value.trim();
+    const address = document.getElementById("admin-hotel-address").value.trim();
+    const msg = document.getElementById("admin-msg");
+
+    if (!name || !address) {
+        msg.textContent = "Hotel name and address are required.";
+        return;
+    }
+
+    try {
+        const res = await fetch("/api/admin/hotels", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, address })
+        });
+
+        const data = await res.json();
+
+        msg.textContent = data.success 
+            ? "Hotel successfully added!" 
+            : (data.error || "Failed to add hotel.");
+
+        if (data.success) {
+            document.getElementById("admin-hotel-name").value = "";
+            document.getElementById("admin-hotel-address").value = "";
+        }
+
+    } catch (err) {
+        msg.textContent = "Error contacting server.";
+        console.error(err);
+    }
+});
+
+// ----------------------------
+// ADMIN: ADD ROOM TYPE
+// ----------------------------
+document.getElementById("admin-add-room")?.addEventListener("click", async () => {
+    const hotelID = document.getElementById("admin-room-hotel-id").value.trim();
+    const roomType = document.getElementById("admin-room-type").value.trim();
+    const quantity = document.getElementById("admin-room-quantity").value.trim();
+    const msg = document.getElementById("admin-msg");
+
+    if (!hotelID || !roomType || !quantity) {
+        msg.textContent = "All fields are required.";
+        return;
+    }
+
+    try {
+        const res = await fetch("/api/admin/rooms", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ hotelID, roomType, quantity })
+        });
+
+        const data = await res.json();
+
+        msg.textContent = data.success
+            ? "Room type added successfully!"
+            : (data.error || "Failed to add room type.");
+
+        if (data.success) {
+            document.getElementById("admin-room-hotel-id").value = "";
+            document.getElementById("admin-room-type").value = "";
+            document.getElementById("admin-room-quantity").value = "";
+        }
+
+    } catch (err) {
+        msg.textContent = "Error contacting server.";
+        console.error(err);
+    }
+});
+
