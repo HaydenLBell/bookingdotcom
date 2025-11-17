@@ -4,50 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Browse Hotels | triplydotcom</title>
-    <link rel="stylesheet" href="/CSS/styles.css" />
-    <link rel="icon" type="image/x-icon" href="/Resources/images/triply.ico">
+    <link rel="stylesheet" href="../CSS/styles.css" />
+    <link rel="icon" type="image/x-icon" href="../Resources/images/triply.ico">
 </head>
-
-<body>
-
-    <!-- ✅ Navigation -->
-    <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const navLinks = document.getElementById('nav-links');
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-
-    if (storedUser) {
-        // Remove login/signup link
-        const loginItem = [...navLinks.children].find(li => li.textContent.includes('Log-in'));
-        if (loginItem) navLinks.removeChild(loginItem);
-
-        // Add account + logout
-        const accountItem = document.createElement('li');
-        accountItem.innerHTML = `<a href="/Pages/account.html">Account (${storedUser.fname || storedUser.email})</a>`;
-        navLinks.appendChild(accountItem);
-
-        const logoutItem = document.createElement('li');
-        logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
-        navLinks.appendChild(logoutItem);
-
-        // Handle logout click
-        document.getElementById('logout-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('user');
-            window.location.reload();
-        });
-    }
-});
-</script>
-
 
 <body>
 
     <!-- Navigation Bar -->
     <nav>
-        <h1><a href="index.html">triply</a>dotcom</h1>
+        <h1><a href="index.html">triplydotcom</a></h1>
 
-        <div class="airbnb-search">
+        <div class="styled-search">
             <div class="search-section">
                 <label for="where">Where</label>
                 <input type="text" id="where" placeholder="Search destinations">
@@ -97,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             </div>
 
-            <button class="search-btn"><a href="/Pages/listings.html">🔍</a></button>
+            <button class="search-btn"><a href="../Pages/listings.html">🔍</a></button>
         </div>
 
         <button id="menu-toggle">☰</button>
@@ -110,18 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
     </nav>
 
 
-    <!-- ✅ Header Section -->
+    <!-- Header Section -->
     <section id="destination-filters">
         <h2>Available Hotels</h2>
         <p>Browse all hotels, compare rooms, and find your perfect stay.</p>
 
         <div class="filter-bar">
-            <!-- ✅ Filter by City -->
+            <!-- Filter by City -->
             <select id="filterCity">
                 <option value="all">Filter by City</option>
             </select>
 
-            <!-- ✅ Sort by Price -->
+            <!-- Sort by Price -->
             <select id="sortPrice">
                 <option value="none">Sort by Price</option>
                 <option value="asc">Price: Low → High</option>
@@ -130,13 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     </section>
 
-    <!-- ✅ Hotel Grid -->
+    <!-- Hotel Grid -->
     <section id="hotel-container" class="destination-grid">
         <!-- Cards injected dynamically -->
     </section>
 
     <!-- Page Logic -->
     <script src="../JS/listings.js"></script>
+    <script src="../JS/app.js"></script>
 
 </body>
 </html>

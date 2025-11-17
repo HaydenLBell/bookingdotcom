@@ -7,46 +7,15 @@
   <link rel="stylesheet" href="../CSS/styles.css" />
   <link rel="icon" type="image/x-icon" href="/Resources/images/triply.ico">
   <script src="../JS/rooms.js" defer></script>
+  <script src="../JS/app.js"></script>
 </head>
-<body>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const navLinks = document.getElementById('nav-links');
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-
-    if (storedUser) {
-        // Remove login/signup link
-        const loginItem = [...navLinks.children].find(li => li.textContent.includes('Log-in'));
-        if (loginItem) navLinks.removeChild(loginItem);
-
-        // Add account + logout
-        const accountItem = document.createElement('li');
-        accountItem.innerHTML = `<a href="/Pages/account.html">Account (${storedUser.fname || storedUser.email})</a>`;
-        navLinks.appendChild(accountItem);
-
-        const logoutItem = document.createElement('li');
-        logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
-        navLinks.appendChild(logoutItem);
-
-        // Handle logout click
-        document.getElementById('logout-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('user');
-            window.location.reload();
-        });
-    }
-});
-</script>
-
 
 <body>
 
     <!-- Navigation Bar -->
     <nav>
-        <h1><a href="index.html">triply</a>dotcom</h1>
-
-        <div class="airbnb-search">
+        <h1><a href="index.html">triplydotcom</a></h1>
+        <div class="styled-search">
             <div class="search-section">
                 <label for="where">Where</label>
                 <input type="text" id="where" placeholder="Search destinations">
@@ -115,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <p id="hotelAddress"></p>
 
       <div id="roomTypeContainer" class="room-type-grid">
-        <!-- Cards injected dynamically via rooms.js -->
+        <!-- We insert cards dynamically, check rooms.js -->
       </div>
     </div>
   </section>
