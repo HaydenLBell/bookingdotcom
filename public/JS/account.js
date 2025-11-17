@@ -34,7 +34,7 @@ function fillAccountDetails() {
 fillAccountDetails();
 
 if (user.isAdmin){
-    document.getElementById("admin-tab-btn").style.display = "inline-block";
+    document.getElementById("tab-admin").style.display = "block";
 }
 
 // ----------------------------

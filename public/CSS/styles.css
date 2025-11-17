@@ -398,6 +398,10 @@ button:hover, .btn:hover{background:var(--accent-2)}
 }
 
 /* Admin section */
+#tab-admin{
+  display:none
+}
+
 #tab-admin input {
   width: calc(100% - 16px);
   margin-bottom: 10px;
