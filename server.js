@@ -551,29 +551,8 @@ app.delete('/api/admin/hotel/:id', (req, res) => {
   });
 });
 
-// Admin: add single room
-app.post('/api/admin/room', (req, res) => {
-  const { userID, hotelID, roomType, pricePerNight, available } = req.body;
-
-  if (!hotelID || !roomType || pricePerNight === undefined) return res.status(400).json({ error: 'hotelID, roomType, pricePerNight required' });
-
-  checkIsAdmin(userID, (err, ok) => {
-    if (err) return res.status(500).json({ error: 'DB error' });
-    if (!ok) return res.status(403).json({ error: 'Admin only' });
-
-    const sql = 'INSERT INTO Rooms (roomType, hotelID, pricePerNight, available) VALUES (?, ?, ?, ?)';
-    db.query(sql, [roomType, hotelID, pricePerNight, available ? 1 : 0], (err, result) => {
-      if (err) {
-        console.error('Insert room error:', err);
-        return res.status(500).json({ error: 'Insert fail', details: err.message });
-      }
-      res.json({ message: 'Room added', roomID: result.insertId });
-    });
-  });
-});
-
 // Admin: add multiple rooms of same type (quantity)
-app.post('/api/admin/hotel/:id/rooms/batch', (req, res) => {
+app.post('/api/admin/hotel/:id/rooms', (req, res) => {
   const hotelID = req.params.id;
   const { userID, roomType, pricePerNight, quantity, available } = req.body;
 
