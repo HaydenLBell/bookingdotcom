@@ -266,33 +266,44 @@ document.getElementById("admin-add-hotel")?.addEventListener("click", async () =
 // ADMIN: ADD ROOM TYPE
 // ----------------------------
 document.getElementById("admin-add-room")?.addEventListener("click", async () => {
+
     const hotelID = document.getElementById("admin-room-hotel-id").value.trim();
     const roomType = document.getElementById("admin-room-type").value.trim();
     const quantity = document.getElementById("admin-room-quantity").value.trim();
+    const pricePerNight = document.getElementById("admin-room-pricePerNight").value.trim();
     const msg = document.getElementById("admin-msg");
 
-    if (!hotelID || !roomType || !quantity) {
+
+    
+
+    if (!hotelID || !roomType || !quantity || !pricePerNight) {
         msg.textContent = "All fields are required.";
         return;
     }
 
     try {
-        const res = await fetch("/api/admin/rooms", {
+        const res = await fetch(`/api/admin/hotel/${hotelID}/rooms`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ hotelID, roomType, quantity })
+            body: JSON.stringify({
+                userID: user.id,
+                roomType,
+                pricePerNight,
+                quantity,
+                available: 1
+            })
         });
 
         const data = await res.json();
 
-        msg.textContent = data.success
-            ? "Room type added successfully!"
-            : (data.error || "Failed to add room type.");
-
-        if (data.success) {
-            document.getElementById("admin-room-hotel-id").value = "";
+        if (data.inserted) {
+            msg.textContent = `Added ${data.inserted} rooms successfully!`;
             document.getElementById("admin-room-type").value = "";
+            document.getElementById("admin-room-hotel-id").value = "";
             document.getElementById("admin-room-quantity").value = "";
+            document.getElementById("admin-room-pricePerNight").value = "";
+        } else {
+            msg.textContent = data.error || "Failed to add rooms.";
         }
 
     } catch (err) {
@@ -300,6 +311,7 @@ document.getElementById("admin-add-room")?.addEventListener("click", async () =>
         console.error(err);
     }
 });
+
 
 
 
