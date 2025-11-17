@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+
   // ===========================
   // NAV MENU TOGGLE
   // ===========================
@@ -79,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const description = card.querySelector("p")?.textContent.toLowerCase() || "";
         const altText = card.querySelector("img")?.alt.toLowerCase() || "";
 
-        // Show the card if ANY field matches
         if (
           title.includes(query) ||
           description.includes(query) ||
@@ -93,21 +93,45 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-
   // ===========================
-  // STAR RATING LOGIC (Optional)
+  // USER NAVBAR LOGIC
   // ===========================
-  document.querySelectorAll(".rating span").forEach((star) => {
-    star.addEventListener("click", function () {
-      const parent = this.parentElement;
-      const allStars = parent.querySelectorAll("span");
+  const storedUser = JSON.parse(localStorage.getItem('user'));
 
-      allStars.forEach((s) => s.classList.remove("active"));
+  if (storedUser && navMenu) {
+    const loginItem = [...navMenu.children].find(li => li.textContent.includes('Log-in'));
+    if (loginItem) navMenu.removeChild(loginItem);
 
-      const index = Array.from(allStars).indexOf(this);
-      for (let i = 0; i <= index; i++) {
-        allStars[i].classList.add("active");
-      }
+    const accountItem = document.createElement('li');
+    accountItem.innerHTML = `<a href="/Pages/account.html">Account (${storedUser.fname || storedUser.email})</a>`;
+    navMenu.appendChild(accountItem);
+
+    const logoutItem = document.createElement('li');
+    logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
+    navMenu.appendChild(logoutItem);
+
+    document.getElementById('logout-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('user');
+      window.location.reload();
     });
-  });
+  }
+
+  // ===========================
+  // CLICKABLE CARDS — ALWAYS ENABLED
+  // ===========================
+  function makeCardsClickable(selector, getCity) {
+    document.querySelectorAll(selector).forEach(card => {
+      card.addEventListener("click", () => {
+        const city = getCity(card);
+        if (!city) return;
+        window.location.href = `/Pages/listings.html?city=${encodeURIComponent(city)}`;
+      });
+    });
+  }
+
+  makeCardsClickable(".trend-card", card => card.querySelector("h3")?.textContent.trim());
+  makeCardsClickable(".recent-card", card => card.textContent.trim());
+  makeCardsClickable(".destination-card", card => card.querySelector("h3")?.textContent.trim());
+
 });

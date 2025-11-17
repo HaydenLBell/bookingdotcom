@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ✅ Render hotel cards
+    // Render hotel cards
     function renderHotels(list) {
         hotelContainer.innerHTML = "";
 

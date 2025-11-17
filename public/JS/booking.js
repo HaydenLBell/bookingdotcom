@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         e.preventDefault();
         console.log("Booking form submitted");
 
-        // ✅ Load logged-in user
+        // Load logged-in user
         const storedUser = JSON.parse(localStorage.getItem("user"));
         console.log("Loaded user:", storedUser);
 
