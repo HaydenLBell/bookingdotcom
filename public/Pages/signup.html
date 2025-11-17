@@ -1,142 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>triplydotcom | Sign Up</title>
-<link rel="icon" type="image/x-icon" href="/Resources/images/triply.ico">
-<style>
-/* Reuse your login CSS */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>triplydotcom | Sign Up</title>
+    <link rel="icon" type="image/x-icon" href="/Resources/images/triply.ico">
+    <link rel="stylesheet" href="../CSS/styles.css">
+    <script src="../JS/loginandsignup.js"></script>
 
-body {
-    font-family: 'Inter', Arial, sans-serif;
-    background-color: #5C556E;
-    color: #F0EEED;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-.login-container {
-    background-color: #383540;
-    padding: 40px 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.login-container h1 {
-    color: #BCB77B;
-    margin-bottom: 15px;
-}
-
-.login-container h2 {
-    font-weight: 400;
-    margin-bottom: 20px;
-}
-
-.login-container label {
-    display: block;
-    text-align: left;
-    margin-bottom: 5px;
-    font-weight: 500;
-}
-
-.login-container input {
-    width: 100%;
-    padding: 10px 15px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    outline: none;
-}
-
-.login-container input:focus {
-    border: 2px solid #BCB77B;
-}
-
-.login-container button {
-    background-color: #BCB77B;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    transition: 0.3s;
-}
-
-.login-container button:hover {
-    background-color: #e03150;
-}
-
-.error-msg {
-    color: #ff4d4d;
-    font-size: 14px;
-    margin-top: 10px;
-}
-</style>
 </head>
-<body>
-<div class="login-container">
-    <a href="index.html">triplydotcom</a>
-    <h2>Create Account</h2>
+<body id = "login-parent">
+    <div class="login-container">
+        <h1><a href="index.html">triplydotcom</a></h1>
+        
+        <h2>Create Account</h2>
 
-    <form id="signupForm">
-        <label for="fname">First Name</label>
-        <input type="text" id="fname" name="fname" required>
+        <form id="signupForm">
+            <label for="fname">First Name</label>
+            <input type="text" id="fname" name="fname" required>
 
-        <label for="lname">Last Name</label>
-        <input type="text" id="lname" name="lname" required>
+            <label for="lname">Last Name</label>
+            <input type="text" id="lname" name="lname" required>
 
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
 
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
 
-        <button type="submit">Create Account</button>
-        <p id="errorMsg" class="error-msg"></p>
-    </form>
-</div>
+            <button type="submit">Create Account</button>
+            <p id="su_errorMsg" class="error-msg"></p>
+        </form>
+    </div>
 
 <script>
-const form = document.getElementById('signupForm');
-const errorMsg = document.getElementById('errorMsg');
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const fname = form.fname.value;
-    const lname = form.lname.value;
-    const email = form.email.value;
-    const password = form.password.value;
-
-    try {
-        const res = await fetch('http://localhost:3000/api/signup', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ fname, lname, email, password })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-            alert('Account created successfully! Redirecting to login...');
-            window.location.href = '/Pages/login.html';
-        } else {
-            errorMsg.textContent = data.error || 'Signup failed.';
-        }
-    } catch (err) {
-        console.error(err);
-        errorMsg.textContent = 'Server error. Try again later.';
-    }
-});
 </script>
-</body>
+    </body>
 </html>

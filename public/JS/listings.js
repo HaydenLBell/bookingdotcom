@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Suite": 5
     };
 
-    // ✅ Fetch hotel data (basic + minPrice)
+    // Fetch hotel data (basic + minPrice)
     async function loadHotels() {
         const res = await fetch("/api/hotels");
         hotels = await res.json();
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ✅ Populate unique cities
+    // Populate unique cities
     function populateCityFilter() {
         // Avoid duplicates and sort
         const cities = [...new Set(hotels.map(h => extractCity(h.address)))].filter(Boolean).sort();

@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Browse Hotels | triplydotcom</title>
-    <link rel="stylesheet" href="/CSS/styles.css" />
-    <link rel="icon" type="image/x-icon" href="/Resources/images/triply.ico">
+    <link rel="stylesheet" href="../CSS/styles.css" />
+    <link rel="icon" type="image/x-icon" href="../Resources/images/triply.ico">
 </head>
 
 <body>
@@ -64,7 +64,7 @@
                 </div>
             </div>
 
-            <button class="search-btn"><a href="/Pages/listings.html">🔍</a></button>
+            <button class="search-btn"><a href="../Pages/listings.html">🔍</a></button>
         </div>
 
         <button id="menu-toggle">☰</button>
@@ -77,18 +77,18 @@
     </nav>
 
 
-    <!-- ✅ Header Section -->
+    <!-- Header Section -->
     <section id="destination-filters">
         <h2>Available Hotels</h2>
         <p>Browse all hotels, compare rooms, and find your perfect stay.</p>
 
         <div class="filter-bar">
-            <!-- ✅ Filter by City -->
+            <!-- Filter by City -->
             <select id="filterCity">
                 <option value="all">Filter by City</option>
             </select>
 
-            <!-- ✅ Sort by Price -->
+            <!-- Sort by Price -->
             <select id="sortPrice">
                 <option value="none">Sort by Price</option>
                 <option value="asc">Price: Low → High</option>
@@ -97,13 +97,14 @@
         </div>
     </section>
 
-    <!-- ✅ Hotel Grid -->
+    <!-- Hotel Grid -->
     <section id="hotel-container" class="destination-grid">
         <!-- Cards injected dynamically -->
     </section>
 
     <!-- Page Logic -->
     <script src="../JS/listings.js"></script>
+    <script src="../JS/app.js"></script>
 
 </body>
 </html>

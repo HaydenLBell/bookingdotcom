@@ -1,170 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>triplydotcom | Login</title>
-<link rel="icon" type="image/x-icon" href="/Resources/images/triply.ico">
-<style>
-/* ===========================
-   GLOBAL STYLES
-=========================== */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: 'Inter', Arial, sans-serif;
-    background-color: #5C556E;
-    color: #F0EEED;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
-
-/* ===========================
-   LOGIN CONTAINER
-=========================== */
-.login-container {
-    background-color: #383540;
-    padding: 40px 30px;
-    border-radius: 15px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.login-container h1 {
-    color: #BCB77B;
-    margin-bottom: 15px;
-}
-
-.login-container h2 {
-    font-weight: 400;
-    margin-bottom: 20px;
-}
-
-.login-container p {
-    margin-bottom: 20px;
-    font-size: 0.95rem;
-}
-
-/* ===========================
-   FORM STYLING
-=========================== */
-
-.login-container a {color:#BCB77B; text-decoration: none;}
-
-.login-container label {
-    display: block;
-    text-align: left;
-    margin-bottom: 5px;
-    font-weight: 500;
-}
-
-.login-container input {
-    width: 100%;
-    padding: 10px 15px;
-    margin-bottom: 15px;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    outline: none;
-}
-
-.login-container input:focus {
-    border: 2px solid #BCB77B;
-}
-
-.login-container button {
-    background-color: #BCB77B;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    transition: 0.3s;
-}
-
-.login-container button:hover {
-    background-color: #e03150;
-}
-
-.signup-link {
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-.signup-link a {
-    color: #BCB77B;
-    text-decoration: none;
-}
-
-.signup-link a:hover {
-    color: #e03150;
-}
-
-.error-msg {
-    color: #ff4d4d;
-    font-size: 14px;
-    margin-top: 10px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>triplydotcom | Login</title>
+    <link rel="icon" type="image/x-icon" href="/Resources/images/triply.ico">
+    <link rel="stylesheet" href="../CSS/styles.css">
+    <script src="../JS/loginandsignup.js"></script>
 </head>
-<body>
-<div class="login-container">
-    <h1><a href="index.html">triplydotcom</a></h1>
-    <h2>Login</h2>
-    <p>Enter your credentials to access your account</p>
-    
-    <form id="loginForm">
-        <label for="username">Email</label>
-        <input type="text" id="username" name="username" required>
-    
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-    
-        <button type="submit">Login</button>
-        <p class="signup-link">Don't have an account? <a href="signup.html">Create one</a></p>
-        <p id="errorMsg" class="error-msg"></p>
-    </form>
-</div>
 
-<script>
-const form = document.getElementById('loginForm');
-const errorMsg = document.getElementById('errorMsg');
+<body id="login-parent">
 
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    <div class="login-container">
+        <h1><a href="index.html">triplydotcom</a></h1>
+        <h2>Login</h2>
+        <p>Enter your credentials to access your account</p>
+        
+        <form id="loginForm">
+            <label for="username">Email</label>
+            <input type="text" id="username" name="username" required>
+        
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        
+            <button type="submit">Login</button>
+            <p class="signup-link">Don't have an account? <a href="signup.html">Create one</a></p>
+            <p id="li_errorMsg" class="error-msg"></p>
+        </form>
 
-    const email = form.username.value;  // backend expects 'email'
-    const password = form.password.value;
+    </div>
 
-    try {
-        const res = await fetch('http://localhost:3000/api/login', {  // match route
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ email, password })
-        });
-
-        const data = await res.json();
-
-        if (res.ok) {
-            // Save user info locally
-            localStorage.setItem('user', JSON.stringify(data.user || { email }));
-
-            // Redirect to homepage
-            window.location.href = '/Pages/index.html';
-        }
-
-    } catch (err) {
-        errorMsg.textContent = 'Server error. Try again later.';
-        console.error(err);
-    }
-});
-</script>
+</body>
+</html>
