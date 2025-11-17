@@ -11,36 +11,9 @@
 
 <body>
 
-<!-- ---------------- NAV BAR SCRIPT ---------------- -->
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const navLinks = document.getElementById('nav-links');
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-
-    if (storedUser) {
-        const loginItem = [...navLinks.children].find(li => li.textContent.includes('Log-in'));
-        if (loginItem) navLinks.removeChild(loginItem);
-
-        const accountItem = document.createElement('li');
-        accountItem.innerHTML = `<a href="/Pages/account.html">Account (${storedUser.fname || storedUser.email})</a>`;
-        navLinks.appendChild(accountItem);
-
-        const logoutItem = document.createElement('li');
-        logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
-        navLinks.appendChild(logoutItem);
-
-        document.getElementById('logout-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('user');
-            window.location.reload();
-        });
-    }
-});
-</script>
-
 <!-- ---------------- NAVIGATION BAR ---------------- -->
 <nav>
-    <h1><a href="index.html">triply</a>dotcom</h1>
+    <h1><a href="index.html">triplydotcom</a></h1>
 
     <div class="airbnb-search">
         <div class="search-section">

@@ -45,12 +45,15 @@ nav{
   justify-content:space-between;
   gap:16px;
   box-shadow:var(--shadow);
+
 }
-nav h1 a{color:var(--text);font-weight:700;font-size:1.35rem}
+
 #menu-toggle{display:none;background:none;border:0;color:var(--text);font-size:1.6rem;cursor:pointer}
 #nav-links{list-style:none;display:flex;gap:18px;align-items:center}
 #nav-links li a{color:var(--text);font-weight:600;opacity:.95;transition:opacity .18s}
 #nav-links li a:hover{opacity:1;color:var(--accent)}
+
+
 
 /* ===========================
    AIRBNB-STYLE SEARCH
