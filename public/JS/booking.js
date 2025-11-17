@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
-        const userID = storedUser.id;  // ✅ correct field name
+        const userID = storedUser.id;  
 
         const checkInDate = document.getElementById("checkInDate").value;
         const numberOfNights = parseInt(document.getElementById("numberOfNights").value);
@@ -61,6 +61,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (response.ok) {
             document.getElementById("bookingMessage").textContent =
                 `Booking confirmed! Booking ID: ${data.bookingID}`;
+            alert('Booking confirmed! Redirecting to home page...');
+            window.location.href = '/Pages/index.html';
         } else {
             document.getElementById("bookingMessage").textContent =
                 `Booking failed: ${data.error}`;
