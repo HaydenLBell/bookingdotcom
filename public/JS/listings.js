@@ -107,7 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 <img src="../Resources/images/hotel_placeholder.jpg" alt="Hotel Image">
                 <h3>${hotel.hotelName}</h3>
                 <p>${hotel.address}</p>
-                
                 <p><strong>From £${hotel.minPrice}</strong> / night</p>
 
                 <button class="view-rooms-btn"
