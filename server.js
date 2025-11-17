@@ -1,6 +1,5 @@
 // ---------------------------------------------
 //  F28WP Coursework Server (Node + Express)
-//  Admin endpoints added (Option A: userID admin check)
 // ---------------------------------------------
 const express = require('express');
 const mysql = require('mysql2');
@@ -29,7 +28,7 @@ const db = mysql.createConnection({
   password: '',
   database: 'f28wp',
   port: 3306
-});
+}).promise();
 
 db.connect(err => {
   if (err) return console.error('MySQL Error:', err);
@@ -37,7 +36,7 @@ db.connect(err => {
 });
 
 // -----------------------------
-// Helper: isAdmin check (Option A)
+// Helper: isAdmin check 
 // -----------------------------
 function checkIsAdmin(userID, cb) {
   if (userID === undefined || userID === null) {
@@ -444,28 +443,33 @@ app.delete('/api/user/:id', (req, res) => {
 //  ADMIN STUFF
 // ------------------------------------------------
 
-// Admin: create a hotel
+// ------------------------------------------------
+//  ADMIN — CLEANED & DEDUPLICATED
+// ------------------------------------------------
+
+// Create a hotel
 app.post('/api/admin/hotel', (req, res) => {
   const { userID, hotelName, address, numberOfRooms } = req.body;
 
-  if (!hotelName || !address) return res.status(400).json({ error: 'hotelName & address required' });
+  if (!hotelName || !address)
+    return res.status(400).json({ error: 'hotelName & address required' });
 
   checkIsAdmin(userID, (err, ok) => {
     if (err) return res.status(500).json({ error: 'DB error' });
     if (!ok) return res.status(403).json({ error: 'Admin only' });
 
-    const sql = 'INSERT INTO Hotels (hotelName, address, numberOfRooms) VALUES (?, ?, ?)';
+    const sql = `
+      INSERT INTO Hotels (hotelName, address, numberOfRooms)
+      VALUES (?, ?, ?)
+    `;
     db.query(sql, [hotelName, address, numberOfRooms || 0], (err, result) => {
-      if (err) {
-        console.error('Insert hotel error:', err);
-        return res.status(500).json({ error: 'Insert fail', details: err.message });
-      }
+      if (err) return res.status(500).json({ error: 'Insert fail', details: err.message });
       res.json({ message: 'Hotel created', hotelID: result.insertId });
     });
   });
 });
 
-// Admin: update hotel
+// Update hotel
 app.put('/api/admin/hotel/:id', (req, res) => {
   const hotelID = req.params.id;
   const { userID, hotelName, address, numberOfRooms } = req.body;
@@ -474,137 +478,127 @@ app.put('/api/admin/hotel/:id', (req, res) => {
     if (err) return res.status(500).json({ error: 'DB error' });
     if (!ok) return res.status(403).json({ error: 'Admin only' });
 
-    const sql = 'UPDATE Hotels SET hotelName = ?, address = ?, numberOfRooms = ? WHERE hotelID = ?';
+    const sql = `
+      UPDATE Hotels 
+      SET hotelName = ?, address = ?, numberOfRooms = ?
+      WHERE hotelID = ?
+    `;
     db.query(sql, [hotelName, address, numberOfRooms, hotelID], (err) => {
-      if (err) {
-        console.error('Update hotel error:', err);
-        return res.status(500).json({ error: 'Update fail', details: err.message });
-      }
+      if (err) return res.status(500).json({ error: 'Update fail', details: err.message });
       res.json({ message: 'Hotel updated' });
     });
   });
 });
 
-// Admin: delete hotel (safe) — if force=1 query param then cascade remove bookings/rooms
+// Delete hotel (with optional force)
 app.delete('/api/admin/hotel/:id', (req, res) => {
   const hotelID = req.params.id;
-  const userID = req.body.userID; // admin user ID
+  const userID = req.body.userID;
   const force = req.query.force === '1';
 
   checkIsAdmin(userID, (err, ok) => {
     if (err) return res.status(500).json({ error: 'DB error' });
     if (!ok) return res.status(403).json({ error: 'Admin only' });
 
-    // Check for bookings tied to this hotel
     db.query('SELECT bookingID FROM Bookings WHERE hotelID = ?', [hotelID], (err, bookings) => {
       if (err) return res.status(500).json({ error: 'DB error' });
 
       const bookingIDs = bookings.map(b => b.bookingID);
+
       if (bookingIDs.length > 0 && !force) {
         return res.status(400).json({ error: 'Hotel has bookings, use ?force=1 to remove' });
       }
 
-      // If force, we will remove BookedRooms -> Bookings -> Rooms -> Hotels
       const doDelete = () => {
-        // get roomIDs for hotel
         db.query('SELECT roomID FROM Rooms WHERE hotelID = ?', [hotelID], (err, roomRows) => {
           if (err) return res.status(500).json({ error: 'DB error' });
 
           const roomIDs = roomRows.map(r => r.roomID);
           const tasks = [];
 
-          // delete BookedRooms for roomIDs (if any)
-          if (roomIDs.length > 0) {
+          if (roomIDs.length > 0)
             tasks.push(cb => db.query('DELETE FROM BookedRooms WHERE roomID IN (?)', [roomIDs], cb));
-          }
 
-          // delete BookedRooms linked to bookingIDs (if any)
           if (bookingIDs.length > 0) {
             tasks.push(cb => db.query('DELETE FROM BookedRooms WHERE bookingID IN (?)', [bookingIDs], cb));
             tasks.push(cb => db.query('DELETE FROM Bookings WHERE bookingID IN (?)', [bookingIDs], cb));
           }
 
-          // delete rooms for hotel
           tasks.push(cb => db.query('DELETE FROM Rooms WHERE hotelID = ?', [hotelID], cb));
-
-          // finally delete hotel
           tasks.push(cb => db.query('DELETE FROM Hotels WHERE hotelID = ?', [hotelID], cb));
 
-          // run sequentially (simple)
           let i = 0;
           const next = (err) => {
-            if (err) {
-              console.error('Cascade delete error:', err);
-              return res.status(500).json({ error: 'Delete failed', details: err.message });
-            }
+            if (err) return res.status(500).json({ error: 'Delete failed', details: err.message });
             if (i >= tasks.length) return res.json({ message: 'Hotel and related data deleted' });
-            const fn = tasks[i++];
-            fn(next);
+            tasks[i++](next);
           };
           next();
         });
       };
 
-      // If no bookings or force, do delete
       doDelete();
     });
   });
 });
 
-// Admin: add single room
+// Add a single room
 app.post('/api/admin/room', (req, res) => {
   const { userID, hotelID, roomType, pricePerNight, available } = req.body;
 
-  if (!hotelID || !roomType || pricePerNight === undefined) return res.status(400).json({ error: 'hotelID, roomType, pricePerNight required' });
+  if (!hotelID || !roomType || pricePerNight === undefined)
+    return res.status(400).json({ error: 'hotelID, roomType, pricePerNight required' });
 
   checkIsAdmin(userID, (err, ok) => {
     if (err) return res.status(500).json({ error: 'DB error' });
     if (!ok) return res.status(403).json({ error: 'Admin only' });
 
-    const sql = 'INSERT INTO Rooms (roomType, hotelID, pricePerNight, available) VALUES (?, ?, ?, ?)';
+    const sql = `
+      INSERT INTO Rooms (roomType, hotelID, pricePerNight, available)
+      VALUES (?, ?, ?, ?)
+    `;
     db.query(sql, [roomType, hotelID, pricePerNight, available ? 1 : 0], (err, result) => {
-      if (err) {
-        console.error('Insert room error:', err);
-        return res.status(500).json({ error: 'Insert fail', details: err.message });
-      }
+      if (err) return res.status(500).json({ error: 'Insert fail', details: err.message });
       res.json({ message: 'Room added', roomID: result.insertId });
     });
   });
 });
 
-// Admin: add multiple rooms of same type (quantity)
-app.post('/api/admin/hotel/:id/rooms/batch', (req, res) => {
-  const hotelID = req.params.id;
-  const { userID, roomType, pricePerNight, quantity, available } = req.body;
+// Add multiple rooms (batch)
+app.post('/api/admin/room/batch', (req, res) => {
+  const { userID, hotelID, roomType, pricePerNight, quantity, available } = req.body;
 
-  if (!roomType || pricePerNight === undefined || !quantity) return res.status(400).json({ error: 'roomType, pricePerNight, quantity required' });
+  if (!hotelID || !roomType || !pricePerNight || !quantity)
+    return res.status(400).json({ error: 'hotelID, roomType, pricePerNight, quantity required' });
 
   checkIsAdmin(userID, (err, ok) => {
     if (err) return res.status(500).json({ error: 'DB error' });
     if (!ok) return res.status(403).json({ error: 'Admin only' });
 
     const qty = Number(quantity);
-    if (!Number.isInteger(qty) || qty <= 0) return res.status(400).json({ error: 'quantity must be a positive integer' });
+    if (!Number.isInteger(qty) || qty <= 0)
+      return res.status(400).json({ error: 'quantity must be a positive integer' });
 
-    // Build multi-insert
     const placeholders = new Array(qty).fill('(?, ?, ?, ?)').join(',');
     const values = [];
+
     for (let i = 0; i < qty; i++) {
       values.push(roomType, hotelID, pricePerNight, available ? 1 : 0);
     }
 
-    const sql = `INSERT INTO Rooms (roomType, hotelID, pricePerNight, available) VALUES ${placeholders}`;
+    const sql = `
+      INSERT INTO Rooms (roomType, hotelID, pricePerNight, available)
+      VALUES ${placeholders}
+    `;
+
     db.query(sql, values, (err, result) => {
-      if (err) {
-        console.error('Batch insert rooms error:', err);
-        return res.status(500).json({ error: 'Insert fail', details: err.message });
-      }
+      if (err) return res.status(500).json({ error: 'Insert fail', details: err.message });
       res.json({ message: 'Rooms added', inserted: result.affectedRows });
     });
   });
 });
 
-// Admin: delete a room (safe) — requires ?force=1 to remove BookedRooms links
+// Delete a room
 app.delete('/api/admin/room/:id', (req, res) => {
   const roomID = req.params.id;
   const userID = req.body.userID;
@@ -616,33 +610,31 @@ app.delete('/api/admin/room/:id', (req, res) => {
 
     db.query('SELECT bookingID FROM BookedRooms WHERE roomID = ?', [roomID], (err, rows) => {
       if (err) return res.status(500).json({ error: 'DB error' });
-      const linked = rows.map(r => r.bookingID);
-      if (linked.length > 0 && !force) {
-        return res.status(400).json({ error: 'Room has bookings, use ?force=1 to remove' });
-      }
 
-      const doDelete = () => {
-        if (linked.length > 0) {
-          db.query('DELETE FROM BookedRooms WHERE roomID = ?', [roomID], (err) => {
-            if (err) console.error('Delete BookedRooms error:', err);
-            db.query('DELETE FROM Rooms WHERE roomID = ?', [roomID], (err) => {
-              if (err) return res.status(500).json({ error: 'Delete fail', details: err.message });
-              res.json({ message: 'Room deleted (and freed from bookings)' });
-            });
-          });
-        } else {
+      const linked = rows.map(r => r.bookingID);
+
+      if (linked.length > 0 && !force)
+        return res.status(400).json({ error: 'Room has bookings, use ?force=1' });
+
+      const deleteRoom = () => {
+        const cleanup = linked.length > 0
+          ? cb => db.query('DELETE FROM BookedRooms WHERE roomID = ?', [roomID], cb)
+          : cb => cb();
+
+        cleanup(() => {
           db.query('DELETE FROM Rooms WHERE roomID = ?', [roomID], (err) => {
             if (err) return res.status(500).json({ error: 'Delete fail', details: err.message });
-            res.json({ message: 'Room deleted' });
+            res.json({ message: linked.length > 0 ? 'Room deleted (with cleanup)' : 'Room deleted' });
           });
-        }
+        });
       };
-      doDelete();
+
+      deleteRoom();
     });
   });
 });
 
-// Admin: list rooms (optionally filter by hotelID)
+// List rooms (optional hotel filter)
 app.get('/api/admin/rooms', (req, res) => {
   const userID = req.query.userID;
   const hotelID = req.query.hotelID;
@@ -652,11 +644,13 @@ app.get('/api/admin/rooms', (req, res) => {
     if (!ok) return res.status(403).json({ error: 'Admin only' });
 
     let sql = `
-      SELECT R.roomID, R.roomType, R.pricePerNight, R.available, R.hotelID, H.hotelName
+      SELECT R.roomID, R.roomType, R.pricePerNight, R.available,
+             R.hotelID, H.hotelName
       FROM Rooms R
       JOIN Hotels H ON R.hotelID = H.hotelID
     `;
     const params = [];
+
     if (hotelID) {
       sql += ' WHERE R.hotelID = ?';
       params.push(hotelID);
@@ -669,95 +663,42 @@ app.get('/api/admin/rooms', (req, res) => {
   });
 });
 
-// Admin: list hotels (admin version)
+// List hotels
 app.get('/api/admin/hotels', (req, res) => {
   const userID = req.query.userID;
+
   checkIsAdmin(userID, (err, ok) => {
     if (err) return res.status(500).json({ error: 'DB error' });
     if (!ok) return res.status(403).json({ error: 'Admin only' });
 
-    const sql = `SELECT hotelID, hotelName, address, numberOfRooms FROM Hotels ORDER BY hotelID`;
-    db.query(sql, (err, rows) => {
+    db.query('SELECT hotelID, hotelName, address, numberOfRooms FROM Hotels ORDER BY hotelID', (err, rows) => {
       if (err) return res.status(500).json({ error: 'DB error', details: err.message });
       res.json(rows);
     });
   });
 });
 
-// Admin: basic site stats
+// Admin stats
 app.get('/api/admin/stats', (req, res) => {
   const userID = req.query.userID;
+
   checkIsAdmin(userID, (err, ok) => {
     if (err) return res.status(500).json({ error: 'DB error' });
     if (!ok) return res.status(403).json({ error: 'Admin only' });
 
-    const sql = `
-      SELECT
-        (SELECT COUNT(*) FROM Hotels) AS hotels,
-        (SELECT COUNT(*) FROM Rooms) AS rooms,
-        (SELECT COUNT(*) FROM Bookings) AS bookings,
-        (SELECT COUNT(*) FROM Users) AS users
-    `;
+  const sql = `
+    SELECT
+      (SELECT COUNT(*) FROM Hotels) AS hotels,
+      (SELECT COUNT(*) FROM Rooms) AS rooms,
+      (SELECT COUNT(*) FROM Bookings) AS bookings,
+      (SELECT COUNT(*) FROM Users) AS users
+  `;
+
     db.query(sql, (err, rows) => {
-      if (err) return res.status(500).json({ error: 'DB error', details: err.message });
+      if (err) return res.status(500).json({ error: 'DB error' });
       res.json(rows[0]);
     });
   });
-});
-
-app.post("/api/admin/hotels", async (req, res) => {
-    const { name, address } = req.body;
-
-    if (!name || !address) {
-        return res.json({ success: false, error: "Missing fields" });
-    }
-
-    try {
-        const [result] = await db.query(
-            "INSERT INTO hotels (hotelName, address) VALUES (?, ?)",
-            [name, address]
-        );
-
-        res.json({
-            success: true,
-            hotelID: result.insertId,
-            message: "Hotel added successfully"
-        });
-
-    } catch (err) {
-        console.error(err);
-        res.json({ success: false, error: "Database error" });
-    }
-});
-
-app.post("/api/admin/rooms", async (req, res) => {
-    const { hotelID, roomType, quantity } = req.body;
-
-    if (!hotelID || !roomType || !quantity) {
-        return res.json({ success: false, error: "Missing fields" });
-    }
-
-    try {
-        const roomInserts = [];
-
-        for (let i = 0; i < quantity; i++) {
-            roomInserts.push([hotelID, roomType, 1]); // 1 = available
-        }
-
-        await db.query(
-            "INSERT INTO rooms (hotelID, roomType, available) VALUES ?",
-            [roomInserts]
-        );
-
-        res.json({
-            success: true,
-            message: `Added ${quantity} ${roomType} rooms to hotel ${hotelID}`
-        });
-
-    } catch (err) {
-        console.error(err);
-        res.json({ success: false, error: "Database error" });
-    }
 });
 
 
