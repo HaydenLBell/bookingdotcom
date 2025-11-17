@@ -34,7 +34,7 @@ function fillAccountDetails() {
 fillAccountDetails();
 
 if (user.isAdmin){
-    document.getElementById("admin-tab-btn").style.display = "inline-block";
+    document.getElementById("tab-admin").style.display = "block";
 }
 
 // ----------------------------
@@ -100,11 +100,43 @@ loadBookings();
 // ----------------------------
 function attachBookingButtons() {
     document.querySelectorAll(".btn-edit").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const id = btn.dataset.id;
-            alert("Edit booking " + id + " (feature coming soon!)");
-        });
+    btn.addEventListener("click", async () => {
+        const bookingID = btn.dataset.id;
+        const userID = btn.dataset.userid;  
+
+        const newDate = prompt("Enter new check-in date (YYYY-MM-DD):");
+        const newNights = prompt("Enter number of nights:");
+
+        if (!newDate || !newNights) return;
+
+        try {
+            const res = await fetch(`/api/bookings/${bookingID}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    userID: user.id,
+                    checkInDate: newDate,
+                    numberOfNights: Number(newNights)
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                alert("Update failed: " + data.error);
+                return;
+            }
+
+            alert("Booking updated successfully!");
+            location.reload(); // reload bookings
+        }
+        catch (err) {
+            console.error("Edit error:", err);
+            alert("Failed to update booking");
+        }
     });
+});
+
 
     document.querySelectorAll(".btn-cancel").forEach(btn => {
         btn.addEventListener("click", async () => {
