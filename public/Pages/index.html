@@ -9,35 +9,6 @@
     <script src="/JS/app.js" defer></script>
 </head>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const navLinks = document.getElementById('nav-links');
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-
-    if (storedUser) {
-        // Remove login/signup link
-        const loginItem = [...navLinks.children].find(li => li.textContent.includes('Log-in'));
-        if (loginItem) navLinks.removeChild(loginItem);
-
-        // Add account + logout
-        const accountItem = document.createElement('li');
-        accountItem.innerHTML = `<a href="/Pages/account.html">Account (${storedUser.fname || storedUser.email})</a>`;
-        navLinks.appendChild(accountItem);
-
-        const logoutItem = document.createElement('li');
-        logoutItem.innerHTML = `<a href="#" id="logout-link">Logout</a>`;
-        navLinks.appendChild(logoutItem);
-
-        // Handle logout click
-        document.getElementById('logout-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            localStorage.removeItem('user');
-            window.location.reload();
-        });
-    }
-});
-</script>
-
 
 <body>
 
@@ -111,11 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
     <section id="recent-searches">
         <h2>Recent Searches</h2>
         <div class="recent-grid">
-            <div class="recent-card">Edinburgh</div>
-            <div class="recent-card">London</div>
-            <div class="recent-card">Paris</div>
-            <div class="recent-card">Barcelona</div>
-            <div class="recent-card">New York</div>
+            <div class="recent-card"><h3>Edinburgh</h3></div>
+            <div class="recent-card"><h3>Oslo</h3></div>
+            <div class="recent-card"><h3>Paris</h3></div>
+            <div class="recent-card"><h3>Barcelona</h3></div>
+            <div class="recent-card"><h3>New York</h3></div>
         </div>
     </section>
 
@@ -124,8 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <h2>Trending Destinations</h2>
         <div class="trending-grid">
             <div class="trend-card">
-                <img src="/Resources/images/london.jpg" alt="IMAGE">
-                <h3>London</h3>
+                <img src="/Resources/images/oslo.jpg" alt="IMAGE">
+                <h3>Oslo</h3>
             </div>
             <div class="trend-card">
                 <img src="/Resources/images/edinburgh.jpg" alt="IMAGE">
