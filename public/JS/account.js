@@ -144,7 +144,12 @@ function attachBookingButtons() {
 
             if (!confirm("Are you sure you want to cancel this booking?")) return;
 
-            const res = await fetch(`/api/bookings/${id}`, { method: "DELETE" });
+            const res = await fetch(`/api/bookings/${id}`, { 
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userID: user.id })
+            });
+
             const data = await res.json();
 
             if (data.success) {

@@ -369,7 +369,7 @@ app.delete('/api/bookings/:bookingID', (req, res) => {
                 console.error('Delete Booking error:', err);
                 return res.status(500).json({ error: 'DB error' });
               }
-              return res.json({ message: 'Booking cancelled' });
+              return res.json({ success: true, message: 'Booking cancelled' });
             });
           });
         });
@@ -379,7 +379,7 @@ app.delete('/api/bookings/:bookingID', (req, res) => {
             console.error('Delete Booking error:', err);
             return res.status(500).json({ error: 'DB error' });
           }
-          return res.json({ message: 'Booking cancelled' });
+          return res.json({ success: true, message: 'Booking cancelled' });
         });
       }
     });
