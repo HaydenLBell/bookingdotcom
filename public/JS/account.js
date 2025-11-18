@@ -312,7 +312,4 @@ document.getElementById("admin-add-room")?.addEventListener("click", async () =>
     }
 });
 
-
-
-
 });

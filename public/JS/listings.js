@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ✅ Extract city from address (expects "street, City, Country")
+    // Extract city from address (expects "street, City, Country").
     function extractCity(address) {
         if (!address) return "Unknown";
         const parts = address.split(",").map(p => p.trim());

@@ -56,6 +56,7 @@ nav{
 
 /* Hamburger doohickey*/
 #menu-toggle {
+
     display:none; /* Hide by default */
     background:none;
     border:0;
@@ -65,10 +66,12 @@ nav{
 }
 
 #nav-links{
+
   list-style:none;
   display:flex;
   gap: 32px;
   align-items:center;
+
 }
 
 #nav-links li a{color:var(--text);font-weight:600;}
@@ -79,27 +82,26 @@ nav{
    SEARCH BAR
    =========================== */
 .styled-search{
+
   display:flex;
   align-items:center;
   background:#fff;
-  border-radius:999px;
+  border-radius:999px; /* Completely round it*/
   padding:6px;
   max-width:680px;
   width:100%;
   box-shadow:0 6px 20px rgba(0,0,0,0.12);
   overflow:visible;
+  height: 65px;
+  
 }
 .search-section{
-  flex:1;
-  display:flex;
-  flex-direction:column;
-  padding:6px 12px;
-  min-width:0;
+  padding:0px 12px;
   border-right:1px solid #EEE;
-  background:#fff; /* force white background */
   border-radius:999px;
+  height: 65px;
+  color: #000000;
 }
-.search-section:last-of-type{border-right:none}
 .search-section label{
   font-size:12px;
   font-weight:700;
@@ -110,12 +112,13 @@ nav{
   border:0;
   outline:0;
   font-size:14px;
-  color:#333;
-  background:#fff; /* force white background */
+  color: var(--bg-dark);
   border-radius:8px;
-  padding:6px;
+  padding:6px;  
 }
-.search-section input::placeholder{color:#999}
+
+.search-section input::placeholder{color: var(--card)}
+
 #guests{cursor:pointer}
 .search-btn{
   background:var(--accent);
@@ -288,7 +291,7 @@ button:hover, .btn:hover{background:var(--accent-2)}
 }
 
 /* ===========================
-   ACCOUNT PAGE REFINEMENT
+   ACCOUNT PAGE
    =========================== */
 
 /* Page wrapper */
@@ -520,11 +523,11 @@ button:hover, .btn:hover{background:var(--accent-2)}
   margin-top: 25px;
 }
 
-/* LOGIN / SIGN-UP */
 
-/* ===========================
-   LOGIN CONTAINER
-=========================== */
+
+/* =================================
+   LOGIN AND SIGN-UP (SHARED STYLES)
+  ================================== */
 
 #login-parent {
     justify-content: center;
@@ -560,11 +563,7 @@ button:hover, .btn:hover{background:var(--accent-2)}
 
 }
 
-/* ===========================
-   FORM STYLING
-=========================== */
-
-
+/* Login / signup form styling */
 .login-container a {color:#BCB77B; text-decoration: none;}
 
 .login-container label {

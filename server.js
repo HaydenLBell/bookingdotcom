@@ -1,7 +1,3 @@
-// ---------------------------------------------
-//  F28WP Coursework Server (Node + Express)
-//  Admin endpoints added (Option A: userID admin check)
-// ---------------------------------------------
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');

@@ -47,7 +47,7 @@ function insertRooms() {
     db.query(q.query, q.values, (err) => {
       if (err) console.error(err);
       if (i === queries.length - 1) {
-        console.log("✅ Rooms inserted successfully!");
+        console.log("Rooms inserted successfully!");
         db.end();
       }
     });
