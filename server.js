@@ -1,7 +1,3 @@
-// ---------------------------------------------
-//  F28WP Coursework Server (Node + Express)
-//  Admin endpoints added (Option A: userID admin check)
-// ---------------------------------------------
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -373,7 +369,7 @@ app.delete('/api/bookings/:bookingID', (req, res) => {
                 console.error('Delete Booking error:', err);
                 return res.status(500).json({ error: 'DB error' });
               }
-              return res.json({ message: 'Booking cancelled' });
+              return res.json({ success: true, message: 'Booking cancelled' });
             });
           });
         });
@@ -383,7 +379,7 @@ app.delete('/api/bookings/:bookingID', (req, res) => {
             console.error('Delete Booking error:', err);
             return res.status(500).json({ error: 'DB error' });
           }
-          return res.json({ message: 'Booking cancelled' });
+          return res.json({ success: true, message: 'Booking cancelled' });
         });
       }
     });

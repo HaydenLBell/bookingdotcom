@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    console.log("✅ booking.js loaded");
 
     const urlParams = new URLSearchParams(window.location.search);
     const roomID = urlParams.get("roomID");
