@@ -166,6 +166,8 @@ function attachBookingButtons() {
 // ----------------------------
 
 document.getElementById("btn-change-password").addEventListener("click", async () => {
+
+
     const current = document.getElementById("currentPassword").value.trim();
     const newPw = document.getElementById("newPassword").value.trim();
     const msg = document.getElementById("security-msg");
@@ -243,9 +245,10 @@ document.getElementById("admin-add-hotel")?.addEventListener("click", async () =
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
-                userID: user.id,       // include current user's ID for admin check
+                userID: user.id,       
                 hotelName, 
-                address 
+                address,
+                numberOfRooms : 0
             })
         });
 
@@ -281,10 +284,10 @@ document.getElementById("admin-add-room")?.addEventListener("click", async () =>
 
     
 
-    if (!hotelID || !roomType || !quantity || !pricePerNight) {
-        msg.textContent = "All fields are required.";
-        return;
-    }
+   if (!roomType || isNaN(hotelID) || isNaN(quantity) || isNaN(pricePerNight)) {
+    msg.textContent = "All fields are required.";
+    return;
+}
 
     try {
         const res = await fetch(`/api/admin/hotel/${hotelID}/rooms`, {

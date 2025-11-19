@@ -390,8 +390,11 @@ app.delete('/api/bookings/:bookingID', (req, res) => {
 //  USER: password change + delete
 // ------------------------------------------------
 app.put('/api/user/change-password', (req, res) => {
+
   const { userID, oldPassword, newPassword } = req.body;
-  if (!userID || !oldPassword || !newPassword)
+
+  if (userID === undefined || !userID || !oldPassword || !newPassword)
+
     return res.status(400).json({ success: false, error: 'Missing fields' });
 
   db.query('SELECT psswrd FROM Users WHERE userID = ?', [userID], (err, rows) => {
